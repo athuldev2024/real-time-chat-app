@@ -1,10 +1,12 @@
 # mrbookshare
 
+## Description
+
 Simple dummy app with a lot of features.
 
-Web application
+## Running the app.
 
-=====================
+** Web application **
 
 cd web-application
 
@@ -12,9 +14,7 @@ npm install
 
 npm start
 
-node server
-
-=====================
+** node server **
 
 cd node-server-side
 
