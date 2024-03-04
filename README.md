@@ -2,7 +2,9 @@
 
 Simple dummy app with a lot of features.
 
-# web application
+Web application
+
+=====================
 
 cd web-application
 
@@ -10,7 +12,9 @@ npm install
 
 npm start
 
-# node server
+node server
+
+=====================
 
 cd node-server-side
 
