@@ -6,7 +6,7 @@ Simple dummy app with a lot of features.
 
 ## Running the app.
 
-**Web application**
+### **Web application**
 
 cd web-application
 
@@ -14,7 +14,7 @@ npm install
 
 npm start
 
-**node server**
+### **node server**
 
 cd node-server-side
 
