@@ -1,3 +1,7 @@
-/node-server-side/node_modules
-/node-server-side/.enc.dev
+# Node side
+node-server-side/node_modules
+node-server-side/.env.dev
+
+# React side
+web-application/node_modules
 
