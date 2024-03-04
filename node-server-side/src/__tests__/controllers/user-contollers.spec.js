@@ -18,6 +18,8 @@ jest.mock("express-validator", () => {
       username: "test",
       password: "password",
       mobile: 123456789,
+      gender: "M",
+      dob: "09/17/1990",
     })),
   };
 });

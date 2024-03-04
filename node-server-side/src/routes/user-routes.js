@@ -32,7 +32,7 @@ router.get(
   loginUser
 );
 
-router.all("/authenticate/:code/:user", authenticate);
+router.all("/authenticate/:code", authenticate);
 router.all(["/update/:mobile", "/delete/:mobile"], authorize);
 
 router.patch(

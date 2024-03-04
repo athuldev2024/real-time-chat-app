@@ -1,13 +1,12 @@
 export const authenticate = (req, res) => {
   const {
-    params: { code, user },
+    params: { code },
   } = req;
 
   req.session.visited = true;
 
   return res.status(Number(code)).json({
     message: "success",
-    user: JSON.parse(user),
   });
 };
 

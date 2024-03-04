@@ -9,7 +9,7 @@ const SALT = 10;
 const registerUser = async (req, res, next) => {
   try {
     const nanoid = customAlphabet("1234567890", 18);
-    const { username, password, mobile, email } = matchedData(req);
+    const { username, password, mobile, email, gender, dob } = matchedData(req);
     const hashedPassword = await bcrypt.hash(password, SALT);
 
     await UserModel.create({
@@ -19,18 +19,11 @@ const registerUser = async (req, res, next) => {
       password,
       hashed: hashedPassword,
       mobile,
+      gender,
+      dob: new Date(dob),
     });
 
-    const jsonStr = JSON.stringify({
-      username,
-      password,
-      email,
-      mobile,
-    });
-
-    return res.redirect(
-      `/api/users/authenticate/${statusCodes.CREATED}/${jsonStr}`
-    );
+    return res.redirect(`/api/users/authenticate/${statusCodes.CREATED}`);
   } catch (error) {
     next(error);
   }
@@ -45,22 +38,13 @@ const loginUser = async (req, res, next) => {
     });
 
     if (user && (await bcrypt.compare(password, user?.hashed))) {
-      const jsonStr = JSON.stringify({
-        username: user.username,
-        password: user.password,
-        email: user.email,
-        mobile: user.mobile,
-      });
-      return res.redirect(
-        `/api/users/authenticate/${statusCodes.SUCCESS}/${jsonStr}`
-      );
+      return res.redirect(`/api/users/authenticate/${statusCodes.SUCCESS}`);
     }
 
     res
       .status(statusCodes.NOT_AUTHENTICATED)
       .json({ message: "Unauthorized access." });
   } catch (error) {
-    console.log("Error: ", error);
     next(error);
   }
 };
@@ -83,8 +67,11 @@ const updateUser = async (req, res, next) => {
 
     const updateToDB = {
       ...updateDetails,
-      hashed: await bcrypt.hash(updateDetails.password, SALT),
-      email: updateDetails.email.toLowerCase(),
+      ...(updateDetails.password && {
+        hashed: await bcrypt.hash(updateDetails.password, SALT),
+      }),
+      ...(updateDetails.email && { email: updateDetails.email.toLowerCase() }),
+      ...(updateDetails.dob ? { dob: new Date(updateDetails.dob) } : {}),
     };
 
     await UserModel.findOneAndUpdate(

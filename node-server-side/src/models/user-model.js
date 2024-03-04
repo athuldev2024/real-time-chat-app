@@ -7,6 +7,12 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   hashed: { type: String },
   mobile: { type: Number, unique: true },
+  gender: { type: String, unique: true, enum: ["M", "F", "O"] },
+  dob: {
+    type: Date,
+    unique: true,
+    max: Date.now,
+  },
 });
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model("UserDB", userSchema);
