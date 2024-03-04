@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { matchedData } from "express-validator";
 import { customAlphabet } from "nanoid";
 import statusCodes from "@constants/status-codes";
+import { getFormattedDate } from "@utils/date-utils";
 
 const SALT = 10;
 
@@ -85,4 +86,29 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-export { loginUser, registerUser, deleteUser, updateUser };
+const getUser = async (req, res, next) => {
+  try {
+    const { username } = matchedData(req);
+
+    const user = await UserModel.findOne({
+      username,
+    });
+
+    const formattedDate = getFormattedDate(user.dob);
+
+    if (user) {
+      return res.status(statusCodes.SUCCESS).json({
+        email: user.email,
+        username: user.username,
+        password: user.password,
+        mobile: user.mobile,
+        gender: user.gender,
+        dob: formattedDate,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { loginUser, registerUser, deleteUser, updateUser, getUser };

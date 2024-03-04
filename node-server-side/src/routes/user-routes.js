@@ -6,6 +6,7 @@ import {
   registerUser,
   deleteUser,
   updateUser,
+  getUser,
 } from "@controllers/user-controllers";
 import { checkSchema, query, param } from "express-validator";
 import {
@@ -58,6 +59,12 @@ router.delete(
   ],
   checkIfUserExists,
   deleteUser
+);
+
+router.get(
+  "/getuser",
+  [query("username").isString().notEmpty().optional(false)],
+  getUser
 );
 
 export default router;
