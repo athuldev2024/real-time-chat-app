@@ -2,15 +2,20 @@
 
 Simple dummy app with a lot of features.
 
-<!-- web application -->
+# web application
 
 cd web-application
+
 npm install
+
 npm start
 
-<!-- node server -->
+# node server
 
 cd node-server-side
+
 npm install
+
 npm run dev
+
 Fill the .env.dev
