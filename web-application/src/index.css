@@ -1,8 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
 
-$primary-color: #c6538c;
-
 body,
 .App {
   margin: 0;
@@ -14,6 +12,6 @@ body,
 }
 
 .vl {
-  border-left: 2px solid $primary-color;
+  border-left: 2px solid #c6538c;
   height: 30px;
 }

@@ -8,10 +8,21 @@ import { Login, Register } from "components/LoginRegister";
 import { Provider } from "react-redux";
 import store from "store";
 import { ToastContainer } from "react-toastify";
+import image from "./assets/main-wallpaper.jpg";
 
 function App() {
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={{
+        backgroundImage: `url(${image})`,
+        height: "100vh",
+        width: "100wh",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
       <Provider store={store}>
         <Router>
           <Routes>

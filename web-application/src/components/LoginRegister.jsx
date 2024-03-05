@@ -2,6 +2,8 @@ import React from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
+import CustomDatePicker from "components/common/CustomDatePicker";
+import CustomRadioButton from "components/common/CustomRadioButton";
 import { useDispatch } from "react-redux";
 import {
   registerUser,
@@ -27,7 +29,10 @@ const Login = () => {
           username: credentials.username,
           password: credentials.password,
         },
-        callback: () => navigate("/main"),
+        callback: () => {
+          localStorage.setItem("username", credentials.username);
+          navigate("/main");
+        },
       })
     );
   };
@@ -150,6 +155,17 @@ const Register = () => {
         value={credentials.email}
         onChange={(event) => changeInCredentials(event, "email")}
         placeholder={"email"}
+      />
+      <CustomDatePicker
+        value={credentials.dob}
+        onChange={(event) => changeInCredentials(event, "dob")}
+        placeholder={"dob"}
+      />
+      <CustomRadioButton
+        value={credentials.gender}
+        arr={["M", "F", "O"]}
+        onChange={(event) => changeInCredentials(event, "gender")}
+        placeholder={"Gender"}
       />
 
       <div

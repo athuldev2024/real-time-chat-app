@@ -11,6 +11,8 @@ const Login = () => {
     password: "",
     mobile: "",
     email: "",
+    dob: "0000-00-00",
+    gender: "",
   });
   const [disabled, setDisabled] = useState(true);
 
@@ -24,7 +26,9 @@ const Login = () => {
         credentials.username &&
           credentials.password &&
           credentials.mobile &&
-          credentials.email
+          credentials.email &&
+          credentials.dob !== "0000-00-00" &&
+          ["M", "F", "O"].includes(credentials.gender)
           ? false
           : true
       );
@@ -65,6 +69,7 @@ const styles = {
   },
   form: {
     width: "50%",
+    backgroundColor: "#fff",
     border: "1px solid #000",
     paddingTop: "30px",
     paddingBottom: "30px",
