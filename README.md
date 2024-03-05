@@ -2,7 +2,7 @@
 
 ## Description
 
-Simple dummy app with a lot of features.
+Simple chat application created with MERN stack.
 
 ## Running the app.
 
