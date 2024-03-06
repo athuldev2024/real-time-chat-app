@@ -102,6 +102,27 @@ export const getUser = createAsyncThunk(
   }
 );
 
+export const fileUpload = createAsyncThunk(
+  "user/fileUpload",
+  async ({ body, headers, callback }, thunkAPI) => {
+    try {
+      const res = await api({
+        path: `uploads/uploadprofile`,
+        method: "POST",
+        params: {},
+        body,
+        headers,
+      });
+
+      callback && callback();
+
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -170,12 +191,24 @@ const userSlice = createSlice({
         state.hasError = false;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        console.log("action.payload: ", action.payload);
         state.isLoading = false;
         state.hasError = false;
         state.userDetails = action.payload;
       })
       .addCase(getUser.rejected, (state) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      // file upload
+      .addCase(fileUpload.pending, (state) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(fileUpload.fulfilled, (state) => {
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(fileUpload.rejected, (state) => {
         state.isLoading = false;
         state.hasError = true;
       });

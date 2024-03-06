@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import ReactLoading from "react-loading";
 import { useDispatch } from "react-redux";
 import { getUser } from "store/userSlice";
+import FileUpload from "components/FileUpload";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const Main = () => {
       <p style={{ color: "#fff" }} onClick={() => navigate("/profile")}>
         Navigate to profile page
       </p>
+      <FileUpload />
     </div>
   );
 };

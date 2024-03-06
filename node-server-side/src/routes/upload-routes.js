@@ -26,4 +26,11 @@ router.post("/uploadprofile", upload.single("file"), (req, res) => {
   });
 });
 
+router.get("/retrieve", (req, res) => {
+  const pathname =
+    "C:/Users/athul/Desktop/main-project/mrbookshare/node-server-side/src/uploads/1669382406983.jpg";
+
+  res.status(200).sendFile(pathname);
+});
+
 export default router;
