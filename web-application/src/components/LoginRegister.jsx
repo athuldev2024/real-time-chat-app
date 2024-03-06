@@ -188,11 +188,18 @@ const Register = () => {
         />
 
         {isUpdate && (
-          <StandardButton
-            onClick={deleteFunc}
-            buttonText={"DeleteUser"}
-            disabled={false}
-          />
+          <>
+            <StandardButton
+              onClick={deleteFunc}
+              buttonText={"DeleteUser"}
+              disabled={false}
+            />
+            <StandardButton
+              onClick={() => navigate("/main")}
+              buttonText={"Go back to profile"}
+              disabled={false}
+            />
+          </>
         )}
 
         {!isUpdate && (

@@ -15,7 +15,7 @@ export const registerUser = createAsyncThunk(
 
       callback && callback();
 
-      return res.data.user;
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
     }
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
 
       callback && callback();
 
-      return res.data.user;
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
     }
@@ -55,7 +55,7 @@ export const updateUser = createAsyncThunk(
 
       callback && callback();
 
-      return res.data.user;
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
     }
@@ -67,7 +67,7 @@ export const deleteUser = createAsyncThunk(
   async ({ params, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/delete/${params.mobile}`,
+        path: `users/delete/${params.username}`,
         method: "DELETE",
         params: {},
         body: {},
@@ -76,6 +76,26 @@ export const deleteUser = createAsyncThunk(
       callback && callback();
 
       return res.data.user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+    }
+  }
+);
+
+export const getUser = createAsyncThunk(
+  "user/getUser",
+  async ({ params, callback }, thunkAPI) => {
+    try {
+      const res = await api({
+        path: `users/getUser`,
+        method: "GET",
+        params: { username: params.username },
+        body: {},
+      });
+
+      callback && callback();
+
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
     }
@@ -110,10 +130,9 @@ const userSlice = createSlice({
         state.isLoading = true;
         state.hasError = false;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state) => {
         state.isLoading = false;
         state.hasError = false;
-        state.userDetails = action.payload;
       })
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
@@ -142,6 +161,21 @@ const userSlice = createSlice({
         state.hasError = false;
       })
       .addCase(deleteUser.rejected, (state) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      // Get User
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        console.log("action.payload: ", action.payload);
+        state.isLoading = false;
+        state.hasError = false;
+        state.userDetails = action.payload;
+      })
+      .addCase(getUser.rejected, (state) => {
         state.isLoading = false;
         state.hasError = true;
       });

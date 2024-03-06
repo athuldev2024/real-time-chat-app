@@ -3,30 +3,42 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getMaxDateAsToday } from "utils/date-utils";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const isUpdate = true;
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
     mobile: "",
     email: "",
+    dob: "0000-00-00",
+    gender: "",
   });
   const [disabled, setDisabled] = useState(true);
   const { isLoading, userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (Object.keys(userDetails).length > 0) {
-      setCredentials({ ...userDetails });
+      setCredentials({
+        ...userDetails,
+        dob: getMaxDateAsToday(new Date(userDetails.dob)),
+      });
+    } else {
+      navigate("/main");
     }
   }, [userDetails]);
 
   useEffect(() => {
     setDisabled(
-      credentials.username &&
-        credentials.password &&
-        credentials.mobile &&
-        credentials.email
+      credentials.username ||
+        credentials.password ||
+        credentials.mobile ||
+        credentials.email ||
+        credentials.dob !== "0000-00-00" ||
+        ["M", "F", "O"].includes(credentials.gender)
         ? false
         : true
     );
@@ -68,6 +80,7 @@ const styles = {
   },
   form: {
     width: "50%",
+    backgroundColor: "#fff",
     border: "1px solid #000",
     paddingTop: "30px",
     paddingBottom: "30px",

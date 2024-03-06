@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: Date.now,
   },
+  profilepath: { type: String, unique: true, default: "No Path" },
 });
 
 export default mongoose.model("UserDB", userSchema);

@@ -3,24 +3,27 @@ import {
   deleteUser,
   updateUser,
   loginUser,
+  getUser,
 } from "@controllers/user-controllers";
 import UserModel from "@models/user-model";
 import statusCodes from "@constants/status-codes";
 import bcrypt from "bcryptjs";
+
+const MOCK_USER = {
+  email: "test@gmail.com",
+  username: "test",
+  password: "password",
+  mobile: 123456789,
+  gender: "M",
+  dob: "09/17/1990",
+};
 
 jest.mock("express-validator", () => {
   const original = jest.requireActual("express-validator");
 
   return {
     ...original,
-    matchedData: jest.fn(() => ({
-      email: "test@gmail.com",
-      username: "test",
-      password: "password",
-      mobile: 123456789,
-      gender: "M",
-      dob: "09/17/1990",
-    })),
+    matchedData: jest.fn(() => MOCK_USER),
   };
 });
 
@@ -108,6 +111,22 @@ describe("login user", () => {
   test("user login - failure", async () => {
     UserModel.findOne = jest.fn().mockRejectedValue(new Error(errMessage));
     await loginUser(mockRequest, mockResponse, nextMock);
+    expect(nextMock).toHaveBeenCalledWith(new Error(errMessage));
+  });
+});
+
+describe("get user", () => {
+  test("get user - success", async () => {
+    UserModel.findOne = jest
+      .fn()
+      .mockResolvedValue({ ...MOCK_USER, dob: new Date(MOCK_USER.dob) });
+    await getUser(mockRequest, mockResponse, nextMock);
+    expect(mockResponse.json).toHaveBeenCalledTimes(1);
+  });
+
+  test("get user - failure", async () => {
+    UserModel.findOne = jest.fn().mockRejectedValue(new Error(errMessage));
+    await getUser(mockRequest, mockResponse, nextMock);
     expect(nextMock).toHaveBeenCalledWith(new Error(errMessage));
   });
 });
