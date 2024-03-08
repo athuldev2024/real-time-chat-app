@@ -1,18 +1,18 @@
 import React from "react";
-import "./styles.scss";
+import Button from "@mui/material/Button";
 
 const StandardButton = (props) => {
-  const { buttonText, onClick, disabled, style } = props;
+  const { buttonText, onClick, disabled } = props;
 
   return (
-    <button
-      {...{ style }}
-      className="std-button"
+    <Button
+      style={{ width: 200 }}
+      variant="contained"
       onClick={onClick}
       disabled={disabled}
     >
       {buttonText}
-    </button>
+    </Button>
   );
 };
 

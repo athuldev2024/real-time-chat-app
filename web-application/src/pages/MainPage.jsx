@@ -1,20 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ReactLoading from "react-loading";
 import { useDispatch } from "react-redux";
-import { getUser, getFile } from "store/userSlice";
-import FileUpload from "components/FileUpload";
+import { getUser } from "store/userSlice";
 
 import Sidebar from "components/sidebar/SideBar";
 import WorkingArea from "components/workingarea/WorkingArea";
 
 const Main = () => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const { isLoading } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(
+      getUser({
+        params: { username: "athul" },
+        callback: () => navigate("/main"),
+      })
+    );
+  }, []);
 
   if (isLoading === true) {
     return (

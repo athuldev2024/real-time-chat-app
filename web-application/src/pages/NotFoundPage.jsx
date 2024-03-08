@@ -1,5 +1,8 @@
 import React from "react";
+import COLORS from "constants/color";
 import { useNavigate } from "react-router-dom";
+import StandardButton from "components/common/StandardButton";
+import image from "assets/no-page-image.png";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
@@ -9,51 +12,28 @@ const NotFoundPage = () => {
   };
 
   return (
-    <div style={styles.errorPage}>
-      <h2 style={styles.h2} data-text="404">
-        404
-      </h2>
-      <h4 style={styles.h4} data-text="Opps! Page not found">
-        Opps! Page not found
-      </h4>
-      <p style={styles.para} onClick={navigateFromHere}>
-        Go back to login screen
-      </p>
+    <div style={styles.container}>
+      <img src={image} alt="404 page" width={400} height={300} />
+      <StandardButton
+        buttonText={"Go back to main page"}
+        onClick={navigateFromHere}
+        disabled={false}
+      />
     </div>
   );
 };
 
 const styles = {
-  errorPage: {
-    position: "absolute",
-    top: "10%",
-    left: "15%",
-    right: "15%",
-    bottom: "10%",
+  container: {
+    height: "80vh",
+    width: "50vw",
+    backgroundColor: COLORS.WHITE,
+    boxShadow: "2px 2px 5px 1px rgba(0, 0, 0, 0.5)",
+    borderRadius: 20,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    background: "#fff",
-    boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
-  },
-  h2: {
-    fontSize: "10vw",
-    lineHeight: "1em",
-    position: "relative",
-  },
-  h4: {
-    fontSize: "1.5em",
-    marginBottom: "20px",
-    textTransform: "uppercase",
-    color: "#000",
-    maxWidth: "600px",
-    position: "relative",
-  },
-  para: {
-    fontSize: "1.2em",
-    color: "#0000cc",
-    textDecoration: "underline",
   },
 };
 

@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 const URL = "http://localhost:5000/api/";
 const SUCCESS_MESSAGE_ARR = [201, 200, 204];
 
-const showToastMessage = () => {
-  toast.error("An error occured while calling API request!!", {
+const showToastMessage = (message) => {
+  toast.error(message ?? "Unknown error occured while calling API request!!", {
     position: "top-center",
     autoClose: 5000,
     hideProgressBar: true,
@@ -35,7 +35,7 @@ function api({ path, method, params, body }) {
         }
       })
       .catch(function (err) {
-        showToastMessage();
+        showToastMessage(err?.message);
         reject(err);
       });
   });
