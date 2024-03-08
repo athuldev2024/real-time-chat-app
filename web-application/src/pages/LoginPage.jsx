@@ -24,7 +24,7 @@ const Login = () => {
     } else {
       return "Register new user";
     }
-  });
+  }, [location]);
 
   const { isLoading } = useSelector((state) => state.user);
 

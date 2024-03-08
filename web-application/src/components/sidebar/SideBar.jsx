@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SidebarHeader from "./SidebarHeader";
 import SidebarChats from "./SidebarChats";
 import CustomTextInput from "components/common/CustomTextInput";
