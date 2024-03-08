@@ -8,16 +8,10 @@ import { Login, Register } from "components/LoginRegister";
 import { Provider } from "react-redux";
 import store from "store";
 import { ToastContainer } from "react-toastify";
-import COLORS from "constants/color";
 
-function App() {
+const App = () => {
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: COLORS.mainBgColor,
-      }}
-    >
+    <div className="App">
       <Provider store={store}>
         <Router>
           <Routes>
@@ -43,6 +37,6 @@ function App() {
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default App;

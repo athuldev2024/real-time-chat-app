@@ -1,5 +1,8 @@
 const COLORS = {
-  mainBgColor: "#313178",
+  mainBgColor: "#505050",
+  WHITE: "#fff",
+  PRIMARY: "#051392",
+  SECONDARY: "darkgrey",
 };
 
 export default COLORS;

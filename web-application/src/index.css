@@ -1,17 +1,32 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
 
-body,
-.App {
+* {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  width: 100vw;
-  display: "flex";
-  flex-direction: column;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ececed;
 }
 
 .vl {
   border-left: 2px solid #c6538c;
   height: 30px;
+}
+
+.headingText {
+  font-family: "Madimi One", sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+
+.paraText {
+  font-family: "Madimi One", sans-serif;
+  font-style: italic;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
 }
