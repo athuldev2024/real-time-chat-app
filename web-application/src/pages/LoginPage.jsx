@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
+import COLORS from "constants/color";
+import image from "assets/login-image.avif";
 
 const Login = () => {
   const location = useLocation();
@@ -15,6 +17,14 @@ const Login = () => {
     gender: "",
   });
   const [disabled, setDisabled] = useState(true);
+
+  const header = useMemo(() => {
+    if (location.pathname === "/") {
+      return "Login user";
+    } else {
+      return "Register new user";
+    }
+  });
 
   const { isLoading } = useSelector((state) => state.user);
 
@@ -42,37 +52,48 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <form style={styles.form} name="login_register">
-        {isLoading === true ? (
-          <ReactLoading
-            type="bubbles"
-            color="#0000FF"
-            height={100}
-            width={50}
-          />
-        ) : (
-          <Outlet context={[credentials, changeInCredentials, disabled]} />
-        )}
-      </form>
-    </div>
+    <form name="login_register">
+      {isLoading === true ? (
+        <ReactLoading type="bubbles" color="#0000FF" height={100} width={50} />
+      ) : (
+        <div style={styles.container}>
+          <div style={styles.leftImage}>
+            <img src={image} alt="login page" width={400} height={300} />
+          </div>
+
+          <div style={styles.form}>
+            <p
+              className="headingText"
+              style={{ fontSize: "2rem", color: "#59981A" }}
+            >
+              {header}
+            </p>
+            <Outlet context={[credentials, changeInCredentials, disabled]} />
+          </div>
+        </div>
+      )}
+    </form>
   );
 };
 
 const styles = {
   container: {
-    width: "100%",
-    height: "100%",
+    height: "90vh",
+    width: "90vw",
+    backgroundColor: COLORS.WHITE,
+    boxShadow: "2px 2px 5px 1px rgba(0, 0, 0, 0.5)",
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "row",
+  },
+  leftImage: {
+    flex: 0.5,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   form: {
-    width: "50%",
-    backgroundColor: "#fff",
-    border: "1px solid #000",
-    paddingTop: "30px",
-    paddingBottom: "30px",
+    flex: 0.5,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
