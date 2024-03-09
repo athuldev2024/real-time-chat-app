@@ -46,6 +46,7 @@ const CustomRadioButton = (props) => {
               <FormControlLabel
                 key={item}
                 value={item}
+                checked={item === value}
                 control={<Radio />}
                 label={labelCheck(item)}
                 onChange={() => clickOption(item)}

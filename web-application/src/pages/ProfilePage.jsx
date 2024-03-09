@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getMaxDateAsToday } from "utils/date-utils";
+import { getCorrectDateFormat } from "utils/date-utils";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Profile = () => {
     if (Object.keys(userDetails).length > 0) {
       setCredentials({
         ...userDetails,
-        dob: getMaxDateAsToday(new Date(userDetails.dob)),
+        dob: getCorrectDateFormat(new Date(userDetails.dob)),
       });
     } else {
       navigate("/main");
