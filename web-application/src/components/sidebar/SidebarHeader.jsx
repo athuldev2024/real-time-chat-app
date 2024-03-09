@@ -5,22 +5,41 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { IconButton } from "@mui/material";
+import Popover from "@mui/material/Popover";
+import ProfilePopoverContainer from "components/ProfilePopoverContainer";
 import COLORS from "constants/color";
 
-const SidebarHeader = ({
-  profileClick,
-  plusClick,
-  singleAdd,
-  grpAdd,
-  darkMode,
-}) => {
+const SidebarHeader = ({ plusClick, singleAdd, grpAdd, darkMode }) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   return (
     <div style={styles.container}>
       <div>
-        <IconButton onClick={profileClick}>
+        <IconButton onClick={handleClick}>
           <AccountCircleIcon color="secondary" />
         </IconButton>
+        <Popover
+          id={"simple-popover"}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+        >
+          <ProfilePopoverContainer />
+        </Popover>
       </div>
+
       <div style={styles.rightSide}>
         <IconButton onClick={plusClick}>
           <AddCircleIcon color="secondary" />

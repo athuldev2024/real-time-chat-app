@@ -38,10 +38,6 @@ const Sidebar = () => {
     setSearch(event.target.value);
   };
 
-  const profileClick = () => {
-    console.log("Profile icon clicked");
-  };
-
   const plusClick = () => {
     console.log("Plus clicked");
   };
@@ -62,7 +58,6 @@ const Sidebar = () => {
     <div style={styles.container}>
       <SidebarHeader
         {...{
-          profileClick,
           plusClick,
           singleAdd,
           grpAdd,

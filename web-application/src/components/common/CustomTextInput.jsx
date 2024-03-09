@@ -17,14 +17,13 @@ const CustomTextInput = (props) => {
     <div style={styles.textField}>
       {isSearch && <SearchIcon color="secondary" />}
       <TextField
-        id="standard-basic"
         label={placeholder}
         variant="standard"
         type={type}
         placeholder={`Enter ${placeholder}`}
         value={value}
         onChange={onChange}
-        autoComplete={autoComplete}
+        autoComplete={autoComplete ?? "off"}
       />
     </div>
   );

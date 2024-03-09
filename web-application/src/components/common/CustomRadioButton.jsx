@@ -1,5 +1,9 @@
-import React from "react";
-import "./styles.scss";
+import * as React from "react";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const CustomRadioButton = (props) => {
   const { arr, value, onChange, placeholder } = props;
@@ -17,36 +21,50 @@ const CustomRadioButton = (props) => {
     }
   };
 
+  const clickOption = (item) => {
+    onChange(
+      {
+        target: {
+          value: item,
+        },
+      },
+      "gender"
+    );
+  };
+
   return (
-    <div className="custom-radio-button-container">
-      <p className="label-for-radios">{`Choose ${placeholder}`}</p>
-      <div className="custom-radio-button">
-        {arr.map((item) => {
-          return (
-            <div key={item}>
-              <label htmlFor={`#${item}`}>{labelCheck(item)}</label>
-              <input
-                type="radio"
-                id={item}
+    <div style={styles.container}>
+      <FormControl>
+        <FormLabel id="demo-radio-buttons-group-label">{`Choose ${placeholder}`}</FormLabel>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="female"
+          name="radio-buttons-group"
+        >
+          {arr.map((item) => {
+            return (
+              <FormControlLabel
+                key={item}
                 value={item}
-                checked={value === item}
-                onChange={() =>
-                  onChange(
-                    {
-                      target: {
-                        value: item,
-                      },
-                    },
-                    "gender"
-                  )
-                }
+                control={<Radio />}
+                label={labelCheck(item)}
+                onChange={() => clickOption(item)}
               />
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </RadioGroup>
+      </FormControl>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 };
 
 export default CustomRadioButton;

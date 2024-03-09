@@ -11,7 +11,7 @@ import {
   updateUser,
   deleteUser,
 } from "store/userSlice";
-import logout from "utils/logout";
+import logout from "utils/logout-utils";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -119,8 +119,8 @@ const Register = () => {
       deleteUser({
         params: { mobile: credentials.mobile },
         callback: () => {
-          navigate("/");
           logout();
+          navigate("/");
         },
       })
     );
