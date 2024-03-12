@@ -4,8 +4,6 @@ import cors from "cors";
 import mongoose from "mongoose";
 import routes from "./src/routes";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import session from "express-session";
 import { config } from "dotenv";
 
 config({ path: `.env.${process.env.NODE_ENV}` });
@@ -18,19 +16,9 @@ const app = express(),
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser("SECRET"));
-app.use(
-  session({
-    secret: "SECRET",
-    saveUninitialized: false,
-    resave: false,
-    cookie: {
-      maxAge: 60000 * 10,
-    },
-  })
-);
+app.use(express.static("public"));
 
-app.use("/", routes);
+app.use("/", routes); // All routes for this application
 
 (async function () {
   try {

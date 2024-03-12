@@ -13,7 +13,7 @@ export const registerUser = createAsyncThunk(
         body,
       });
 
-      callback && callback();
+      callback && callback(res.data);
 
       return res.data;
     } catch (error) {
@@ -33,7 +33,7 @@ export const loginUser = createAsyncThunk(
         body: {},
       });
 
-      callback && callback();
+      callback && callback(res.data);
 
       return res.data;
     } catch (error) {
@@ -47,7 +47,7 @@ export const updateUser = createAsyncThunk(
   async ({ body, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/update/${body.mobile}`,
+        path: `users/update/${body.id}`,
         method: "PATCH",
         params: {},
         body,
@@ -67,7 +67,7 @@ export const deleteUser = createAsyncThunk(
   async ({ params, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/delete/${params.username}`,
+        path: `users/delete/${params.id}`,
         method: "DELETE",
         params: {},
         body: {},
@@ -89,52 +89,11 @@ export const getUser = createAsyncThunk(
       const res = await api({
         path: `users/getUser`,
         method: "GET",
-        params: { username: params.username },
+        params: { id: params.id },
         body: {},
       });
 
       callback && callback();
-
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
-    }
-  }
-);
-
-export const fileUpload = createAsyncThunk(
-  "user/fileUpload",
-  async ({ body, headers, callback }, thunkAPI) => {
-    try {
-      const res = await api({
-        path: `uploads/uploadprofile`,
-        method: "POST",
-        params: {},
-        body,
-        headers,
-      });
-
-      callback && callback();
-
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
-    }
-  }
-);
-
-export const getFile = createAsyncThunk(
-  "user/getFile",
-  async ({ callback }, thunkAPI) => {
-    try {
-      const res = await api({
-        path: `uploads/retrieve`,
-        method: "GET",
-        params: {},
-        body: {},
-      });
-
-      callback && callback(res);
 
       return res.data;
     } catch (error) {
@@ -147,7 +106,6 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     userDetails: {},
-    profile: null,
     isLoading: false,
     hasError: false,
   },
@@ -217,33 +175,6 @@ const userSlice = createSlice({
         state.userDetails = action.payload;
       })
       .addCase(getUser.rejected, (state) => {
-        state.isLoading = false;
-        state.hasError = true;
-      })
-      // file upload
-      .addCase(fileUpload.pending, (state) => {
-        state.isLoading = true;
-        state.hasError = false;
-      })
-      .addCase(fileUpload.fulfilled, (state) => {
-        state.isLoading = false;
-        state.hasError = false;
-      })
-      .addCase(fileUpload.rejected, (state) => {
-        state.isLoading = false;
-        state.hasError = true;
-      })
-      // get file
-      .addCase(getFile.pending, (state) => {
-        state.isLoading = true;
-        state.hasError = false;
-      })
-      .addCase(getFile.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.hasError = false;
-        state.profile = action.payload;
-      })
-      .addCase(getFile.rejected, (state) => {
         state.isLoading = false;
         state.hasError = true;
       });

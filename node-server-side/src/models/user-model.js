@@ -7,13 +7,12 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   hashed: { type: String },
   mobile: { type: Number, unique: true },
-  gender: { type: String, unique: true, enum: ["M", "F", "O"] },
-  dob: {
-    type: Date,
-    unique: true,
-    max: Date.now,
-  },
-  profilepath: { type: String, unique: true, default: "No Path" },
+  chatidarr: [
+    {
+      chatid: { type: Number, unique: true },
+      lastmessage: { type: String, unique: true },
+    },
+  ],
 });
 
 export default mongoose.model("UserDB", userSchema);

@@ -1,33 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StandardButton from "components/common/StandardButton";
-import { useDispatch } from "react-redux";
-import { fileUpload } from "store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fileUpload } from "store/uploadSlice";
 import { IconButton } from "@mui/material";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import COLORS from "constants/color";
 import { useNavigate } from "react-router-dom";
 import logout from "utils/logout-utils";
+import { showToastMessage } from "utils/toast-utils";
 
 const ProfileImage = () => {
   const dispatch = useDispatch();
   const [file, setFile] = useState(null);
+  const username = localStorage.getItem("username");
+  const { profile } = useSelector((state) => state.upload);
 
   const handleChange = (event) => {
-    const file = event.target.files[0];
     const ext = event.target.files[0].name.split(".")[1].toLowerCase();
-    if (["png", "jpeg", "jpg"].includes(ext)) {
-      setFile(file);
+    if (["jpg"].includes(ext)) {
+      setFile(event.target.files[0]);
     } else {
-      alert("Invalid file type"); // change later
+      showToastMessage("Invalid file type");
     }
   };
 
   const uploadImage = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", "profile");
+    const ext = file.name.split(".")[1].toLowerCase();
+    formData.append("file", file, `profile_${username}.${ext}`);
     const headers = {
       "content-type": "multipart/form-data",
     };
@@ -40,8 +42,29 @@ const ProfileImage = () => {
     );
   };
 
+  useEffect(() => {
+    if (useEffect) {
+      console.log("PROFILE: ", typeof profile);
+    }
+  }, [profile]);
+
   return (
     <>
+      <>
+        {profile ? (
+          <>
+            <img
+              src={`http://localhost:5000/profile_${username}.jpg`}
+              alt="profile pic"
+              width={100}
+              height={100}
+              style={{ borderRadius: 90 }}
+            />
+          </>
+        ) : (
+          <></>
+        )}
+      </>
       <input
         class="custom-file-input"
         type="file"
@@ -65,7 +88,9 @@ const ProfilePopoverContainer = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.leftSide}></div>
+      <div style={styles.leftSide}>
+        <ProfileImage />
+      </div>
       <div style={styles.rightSide}>
         <IconButton>
           <ModeEditIcon
@@ -98,7 +123,10 @@ const styles = {
   },
   leftSide: {
     flex: 0.5,
-    backgroundColor: "yellow",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   rightSide: {
     flex: 0.5,

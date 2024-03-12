@@ -1,5 +1,5 @@
 const logout = () => {
-  console.log("App logged out!!");
+  localStorage.clear();
 };
 
 export default logout;

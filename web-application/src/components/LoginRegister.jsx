@@ -2,8 +2,6 @@ import React from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
-import CustomDatePicker from "components/common/CustomDatePicker";
-import CustomRadioButton from "components/common/CustomRadioButton";
 import { useDispatch } from "react-redux";
 import {
   registerUser,
@@ -29,8 +27,8 @@ const Login = () => {
           username: credentials.username,
           password: credentials.password,
         },
-        callback: () => {
-          localStorage.setItem("username", credentials.username);
+        callback: (data) => {
+          localStorage.setItem("id", data.id);
           navigate("/main");
         },
       })
@@ -98,7 +96,10 @@ const Register = () => {
     dispatch(
       registerUser({
         body: { ...credentials },
-        callback: () => navigate("/main"),
+        callback: (data) => {
+          localStorage.setItem("id", data.id);
+          navigate("/main");
+        },
       })
     );
   };
@@ -117,7 +118,7 @@ const Register = () => {
     event.preventDefault();
     dispatch(
       deleteUser({
-        params: { mobile: credentials.mobile },
+        params: { id: credentials.id },
         callback: () => {
           logout();
           navigate("/");
@@ -156,17 +157,6 @@ const Register = () => {
         onChange={(event) => changeInCredentials(event, "email")}
         placeholder={"email"}
       />
-      <CustomDatePicker
-        value={credentials.dob}
-        onChange={(event) => changeInCredentials(event, "dob")}
-        placeholder={"dob"}
-      />
-      <CustomRadioButton
-        value={credentials.gender}
-        arr={["M", "F", "O"]}
-        onChange={(event) => changeInCredentials(event, "gender")}
-        placeholder={"Gender"}
-      />
 
       <div
         style={{
@@ -191,7 +181,7 @@ const Register = () => {
           <>
             <StandardButton
               onClick={deleteFunc}
-              buttonText={"DeleteUser"}
+              buttonText={"Delete User"}
               disabled={false}
             />
             <StandardButton

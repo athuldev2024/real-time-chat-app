@@ -15,10 +15,12 @@ const Main = () => {
 
   const { isLoading } = useSelector((state) => state.user);
 
+  const id = localStorage.getItem("id");
+
   useEffect(() => {
     dispatch(
       getUser({
-        params: { username: "athul" },
+        params: { id },
         callback: () => navigate("/main"),
       })
     );

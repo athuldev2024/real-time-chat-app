@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getCorrectDateFormat } from "utils/date-utils";
+import COLORS from "constants/color";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -24,7 +24,6 @@ const Profile = () => {
     if (Object.keys(userDetails).length > 0) {
       setCredentials({
         ...userDetails,
-        dob: getCorrectDateFormat(new Date(userDetails.dob)),
       });
     } else {
       navigate("/main");
@@ -80,7 +79,7 @@ const styles = {
   },
   form: {
     width: "50%",
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.WHITE,
     border: "1px solid #000",
     paddingTop: "30px",
     paddingBottom: "30px",

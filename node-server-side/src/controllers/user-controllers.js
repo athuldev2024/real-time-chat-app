@@ -3,28 +3,27 @@ import bcrypt from "bcryptjs";
 import { matchedData } from "express-validator";
 import { customAlphabet } from "nanoid";
 import statusCodes from "@constants/status-codes";
-import { getFormattedDate } from "@utils/date-utils";
 
 const SALT = 10;
+const ID_SIZE = 5;
 
 const registerUser = async (req, res, next) => {
   try {
-    const nanoid = customAlphabet("1234567890", 18);
-    const { username, password, mobile, email, gender, dob } = matchedData(req);
+    const nanoid = customAlphabet("1234567890", ID_SIZE);
+    const { username, password, mobile, email } = matchedData(req);
     const hashedPassword = await bcrypt.hash(password, SALT);
 
+    const id = nanoid();
     await UserModel.create({
-      id: nanoid(),
+      id,
       email: email.toLowerCase(),
       username,
       password,
       hashed: hashedPassword,
       mobile,
-      gender,
-      dob: new Date(dob),
     });
 
-    return res.redirect(`/api/users/authenticate/${statusCodes.CREATED}`);
+    return res.redirect(`/api/users/authenticate/${statusCodes.CREATED}/${id}`);
   } catch (error) {
     next(error);
   }
@@ -39,7 +38,9 @@ const loginUser = async (req, res, next) => {
     });
 
     if (user && (await bcrypt.compare(password, user?.hashed))) {
-      return res.redirect(`/api/users/authenticate/${statusCodes.SUCCESS}`);
+      return res.redirect(
+        `/api/users/authenticate/${statusCodes.SUCCESS}/${user.id}`
+      );
     }
 
     res
@@ -52,9 +53,11 @@ const loginUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const { mobile } = matchedData(req);
+    const { id } = matchedData(req);
 
-    await UserModel.deleteOne({ mobile });
+    console.log("ID: ", id);
+
+    await UserModel.deleteOne({ id });
 
     return res.status(statusCodes.DELETED).send("User deleted.");
   } catch (error) {
@@ -75,10 +78,7 @@ const updateUser = async (req, res, next) => {
       ...(updateDetails.dob ? { dob: new Date(updateDetails.dob) } : {}),
     };
 
-    await UserModel.findOneAndUpdate(
-      { mobile: updateDetails.mobile },
-      updateToDB
-    );
+    await UserModel.findOneAndUpdate({ mobile: updateDetails.id }, updateToDB);
 
     return res.status(statusCodes.UPDATED).json({ message: "User updated." });
   } catch (error) {
@@ -88,22 +88,21 @@ const updateUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const { username } = matchedData(req);
+    const { id } = matchedData(req);
+
+    console.log("id: ", id);
 
     const user = await UserModel.findOne({
-      username,
+      id,
     });
-
-    const formattedDate = getFormattedDate(user.dob);
 
     if (user) {
       return res.status(statusCodes.SUCCESS).json({
+        id: user.id,
         email: user.email,
         username: user.username,
         password: user.password,
         mobile: user.mobile,
-        gender: user.gender,
-        dob: formattedDate,
       });
     }
   } catch (error) {

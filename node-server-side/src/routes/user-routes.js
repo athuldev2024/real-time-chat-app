@@ -33,37 +33,27 @@ router.get(
   loginUser
 );
 
-router.all("/authenticate/:code", authenticate);
-router.all(["/update/:mobile", "/delete/:mobile"], authorize);
+router.all("/authenticate/:code/:id", authenticate);
+router.all(["/update/:id", "/delete/:id", "/getuser"], authorize);
 
 router.patch(
-  "/update/:mobile",
-  [
-    checkSchema(patchUserValidationSchema),
-    param("mobile").isString().optional(false).isLength({
-      min: 9,
-      max: 10,
-    }),
-  ],
+  "/update/:id",
+  [param("id").isInt().notEmpty().optional(false)],
+  checkSchema(patchUserValidationSchema),
   checkIfUserExists,
   updateUser
 );
 
 router.delete(
-  "/delete/:mobile",
-  [
-    param("mobile").isString().optional(false).isLength({
-      min: 9,
-      max: 10,
-    }),
-  ],
+  "/delete/:id",
+  [param("id").isInt().notEmpty().optional(false)],
   checkIfUserExists,
   deleteUser
 );
 
 router.get(
   "/getuser",
-  [query("username").isString().notEmpty().optional(false)],
+  [query("id").isInt().notEmpty().optional(false)],
   getUser
 );
 

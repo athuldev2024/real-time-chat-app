@@ -1,14 +1,15 @@
 import { Router } from "express";
 import multer from "multer";
+import fs from "fs";
 
 const router = Router();
 
+const PATH =
+  "C:/Users/athul/Desktop/main-project/mrbookshare/node-server-side/public";
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(
-      null,
-      "C:/Users/athul/Desktop/main-project/mrbookshare/node-server-side/src/uploads"
-    );
+    cb(null, PATH);
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -18,19 +19,26 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/uploadprofile", upload.single("file"), (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
-
-  res.status(200).json({
+  return res.status(200).json({
     message: "File uploaded",
   });
 });
 
-router.get("/retrieve", (req, res) => {
-  const pathname =
-    "C:/Users/athul/Desktop/main-project/mrbookshare/node-server-side/src/uploads/1669382406983.jpg";
+router.get("/retrieve", (req, res, next) => {
+  try {
+    const { filename } = req.query;
+    const filePath = `${PATH}/${filename}`;
 
-  res.status(200).sendFile(pathname);
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        message: "No file found",
+      });
+    }
+
+    return res.status(200).sendFile(filePath);
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;

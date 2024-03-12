@@ -13,8 +13,6 @@ const Login = () => {
     password: "",
     mobile: "",
     email: "",
-    dob: {},
-    gender: "",
   });
   const [disabled, setDisabled] = useState(true);
 
@@ -36,9 +34,7 @@ const Login = () => {
         credentials.username &&
           credentials.password &&
           credentials.mobile &&
-          credentials.email &&
-          Object.keys(credentials.dob).length > 0 &&
-          ["M", "F", "O"].includes(credentials.gender)
+          credentials.email
           ? false
           : true
       );

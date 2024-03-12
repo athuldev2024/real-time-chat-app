@@ -14,8 +14,6 @@ const MOCK_USER = {
   username: "test",
   password: "password",
   mobile: 123456789,
-  gender: "M",
-  dob: "09/17/1990",
 };
 
 jest.mock("express-validator", () => {
@@ -117,9 +115,7 @@ describe("login user", () => {
 
 describe("get user", () => {
   test("get user - success", async () => {
-    UserModel.findOne = jest
-      .fn()
-      .mockResolvedValue({ ...MOCK_USER, dob: new Date(MOCK_USER.dob) });
+    UserModel.findOne = jest.fn().mockResolvedValue({ ...MOCK_USER });
     await getUser(mockRequest, mockResponse, nextMock);
     expect(mockResponse.json).toHaveBeenCalledTimes(1);
   });
