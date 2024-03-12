@@ -8,7 +8,7 @@ import {
   updateUser,
   getUser,
 } from "@controllers/user-controllers";
-import { checkSchema, query, param } from "express-validator";
+import { checkSchema, query, param, check } from "express-validator";
 import {
   createUserValidationSchema,
   patchUserValidationSchema,
@@ -26,8 +26,8 @@ router.post(
 router.get(
   "/login",
   [
-    query("username").isString().notEmpty().optional(false),
-    query("password").isString().notEmpty().optional(false),
+    query("username", "Invalid username").isString().notEmpty().optional(false),
+    query("password", "Invalid password").isString().notEmpty().optional(false),
   ],
   checkIfUserExists,
   loginUser
@@ -38,7 +38,7 @@ router.all(["/update/:id", "/delete/:id", "/getuser"], authorize);
 
 router.patch(
   "/update/:id",
-  [param("id").isInt().notEmpty().optional(false)],
+  [param("id", "Invalid ID").isInt().notEmpty().optional(false)],
   checkSchema(patchUserValidationSchema),
   checkIfUserExists,
   updateUser
@@ -46,14 +46,15 @@ router.patch(
 
 router.delete(
   "/delete/:id",
-  [param("id").isInt().notEmpty().optional(false)],
+  [param("id", "Invalid ID").isInt().notEmpty().optional(false)],
   checkIfUserExists,
   deleteUser
 );
 
 router.get(
   "/getuser",
-  [query("id").isInt().notEmpty().optional(false)],
+  [check("id", "Invalid ID").isInt().notEmpty().optional(false).exists()],
+  checkIfUserExists,
   getUser
 );
 

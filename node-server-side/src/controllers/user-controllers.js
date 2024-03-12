@@ -12,8 +12,8 @@ const registerUser = async (req, res, next) => {
     const nanoid = customAlphabet("1234567890", ID_SIZE);
     const { username, password, mobile, email } = matchedData(req);
     const hashedPassword = await bcrypt.hash(password, SALT);
-
     const id = nanoid();
+
     await UserModel.create({
       id,
       email: email.toLowerCase(),
@@ -55,8 +55,6 @@ const deleteUser = async (req, res, next) => {
   try {
     const { id } = matchedData(req);
 
-    console.log("ID: ", id);
-
     await UserModel.deleteOne({ id });
 
     return res.status(statusCodes.DELETED).send("User deleted.");
@@ -78,7 +76,7 @@ const updateUser = async (req, res, next) => {
       ...(updateDetails.dob ? { dob: new Date(updateDetails.dob) } : {}),
     };
 
-    await UserModel.findOneAndUpdate({ mobile: updateDetails.id }, updateToDB);
+    await UserModel.findOneAndUpdate({ id: updateDetails.id }, updateToDB);
 
     return res.status(statusCodes.UPDATED).json({ message: "User updated." });
   } catch (error) {
@@ -89,8 +87,6 @@ const updateUser = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   try {
     const { id } = matchedData(req);
-
-    console.log("id: ", id);
 
     const user = await UserModel.findOne({
       id,
@@ -104,6 +100,10 @@ const getUser = async (req, res, next) => {
         password: user.password,
         mobile: user.mobile,
       });
+    } else {
+      return res
+        .status(statusCodes.NOT_FOUND)
+        .json({ message: "No user found." });
     }
   } catch (error) {
     next(error);

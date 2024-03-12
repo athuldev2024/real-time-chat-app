@@ -12,7 +12,9 @@ router.use("/api/uploads", uploadRouter);
 router.use("/api/chats", chatRouter);
 
 router.use((req, res) => {
-  return res.status(statusCodes.NOT_FOUND).json({ message: "Not Found." });
+  return res
+    .status(statusCodes.NOT_FOUND)
+    .json({ message: "Route not found." });
 });
 
 router.use(errorHandler);

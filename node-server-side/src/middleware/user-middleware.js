@@ -8,10 +8,10 @@ export const checkIfUserExists = async (req, res, next) => {
     if (validationErrors?.errors && validationErrors?.errors?.length > 0)
       return res.status(400).json({ errors: validationErrors.array() });
 
-    const { mobile, username, id } = matchedData(req);
+    const { mobile, username, id, email } = matchedData(req);
 
     const checkIfExists = await UserModel.exists({
-      $or: [{ mobile }, { username }, { id }],
+      $or: [{ mobile }, { username }, { id }, { email }],
     });
 
     switch (req.path.split("/")[1]) {
@@ -28,6 +28,8 @@ export const checkIfUserExists = async (req, res, next) => {
           return res
             .status(statusCodes.CONFLICT)
             .json({ message: "User already exists." });
+        break;
+      default:
         break;
     }
 

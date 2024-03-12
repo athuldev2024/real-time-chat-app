@@ -14,8 +14,6 @@ const Profile = () => {
     password: "",
     mobile: "",
     email: "",
-    dob: "0000-00-00",
-    gender: "",
   });
   const [disabled, setDisabled] = useState(true);
   const { isLoading, userDetails } = useSelector((state) => state.user);
@@ -35,9 +33,7 @@ const Profile = () => {
       credentials.username ||
         credentials.password ||
         credentials.mobile ||
-        credentials.email ||
-        credentials.dob !== "0000-00-00" ||
-        ["M", "F", "O"].includes(credentials.gender)
+        credentials.email
         ? false
         : true
     );

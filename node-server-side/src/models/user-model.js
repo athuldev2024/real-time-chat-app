@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   mobile: { type: Number, unique: true },
   chatidarr: [
     {
-      chatid: { type: Number, unique: true },
-      lastmessage: { type: String, unique: true },
+      chatid: { type: Number },
+      lastmessage: { type: String },
     },
   ],
 });
