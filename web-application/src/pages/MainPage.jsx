@@ -6,7 +6,6 @@ import ReactLoading from "react-loading";
 import { useDispatch } from "react-redux";
 import { getUser } from "store/userSlice";
 import { getAllUsers } from "store/chatSlice";
-
 import Sidebar from "components/sidebar/SideBar";
 import WorkingArea from "components/workingarea/WorkingArea";
 

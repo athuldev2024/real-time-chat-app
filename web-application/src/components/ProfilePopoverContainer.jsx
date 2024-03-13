@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import StandardButton from "components/common/StandardButton";
 import { useDispatch, useSelector } from "react-redux";
 import { fileUpload } from "store/uploadSlice";
-import { IconButton } from "@mui/material";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import LogoutIcon from "@mui/icons-material/Logout";
 import COLORS from "constants/color";
 import { useNavigate } from "react-router-dom";
-import logout from "utils/logout-utils";
+
 import { showToastMessage } from "utils/toast-utils";
 
 const ProfileImage = () => {
@@ -66,7 +63,7 @@ const ProfileImage = () => {
         )}
       </>
       <input
-        class="custom-file-input"
+        className="custom-file-input"
         type="file"
         placeholder={`upload file`}
         onChange={handleChange}
@@ -91,22 +88,7 @@ const ProfilePopoverContainer = () => {
       <div style={styles.leftSide}>
         <ProfileImage />
       </div>
-      <div style={styles.rightSide}>
-        <IconButton>
-          <ModeEditIcon
-            fontSize="large"
-            color="secondary"
-            onClick={() => navigate("/profile")}
-          />
-        </IconButton>
-        <IconButton>
-          <LogoutIcon
-            fontSize="large"
-            color="secondary"
-            onClick={() => logout()}
-          />
-        </IconButton>
-      </div>
+      <div style={styles.rightSide}></div>
     </div>
   );
 };

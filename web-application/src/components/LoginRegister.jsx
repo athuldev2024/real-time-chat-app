@@ -3,13 +3,7 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
 import { useDispatch } from "react-redux";
-import {
-  registerUser,
-  loginUser,
-  updateUser,
-  deleteUser,
-} from "store/userSlice";
-import logout from "utils/logout-utils";
+import { registerUser, loginUser, updateUser } from "store/userSlice";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -114,19 +108,6 @@ const Register = () => {
     );
   };
 
-  const deleteFunc = (event) => {
-    event.preventDefault();
-    dispatch(
-      deleteUser({
-        params: { id: credentials.id },
-        callback: () => {
-          logout();
-          navigate("/");
-        },
-      })
-    );
-  };
-
   return (
     <>
       <CustomTextInput
@@ -176,21 +157,6 @@ const Register = () => {
           buttonText={!isUpdate ? "Register" : "Update"}
           disabled={disabled}
         />
-
-        {isUpdate && (
-          <>
-            <StandardButton
-              onClick={deleteFunc}
-              buttonText={"Delete User"}
-              disabled={false}
-            />
-            <StandardButton
-              onClick={() => navigate("/main")}
-              buttonText={"Go back to profile"}
-              disabled={false}
-            />
-          </>
-        )}
 
         {!isUpdate && (
           <>

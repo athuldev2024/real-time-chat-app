@@ -35,7 +35,6 @@ export const checkIfUserExists = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("Error occured in this plae user validation");
     next(error);
   }
 };

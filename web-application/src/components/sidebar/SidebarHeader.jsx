@@ -5,10 +5,17 @@ import { IconButton } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import ProfilePopoverContainer from "components/ProfilePopoverContainer";
 import COLORS from "constants/color";
+import logout from "utils/logout-utils";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
 
 const SidebarHeader = ({ darkMode }) => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const handleClick = (event) => {
+    event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -38,8 +45,11 @@ const SidebarHeader = ({ darkMode }) => {
       </div>
 
       <div style={styles.rightSide}>
-        <IconButton onClick={darkMode}>
-          <DarkModeIcon color="secondary" />
+        <IconButton onClick={() => navigate("/profile")}>
+          <ModeEditIcon fontSize="large" color="secondary" />
+        </IconButton>
+        <IconButton onClick={() => logout()}>
+          <LogoutIcon fontSize="large" color="secondary" />
         </IconButton>
         <IconButton onClick={darkMode}>
           <DarkModeIcon color="secondary" />

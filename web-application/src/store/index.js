@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import uploadReducer from "./uploadSlice";
 import chatReducer from "./chatSlice";
+import { createContext } from "react";
 
 const store = configureStore({
   reducer: {
@@ -10,5 +11,7 @@ const store = configureStore({
     chat: chatReducer,
   },
 });
+
+export const MyContext = createContext("");
 
 export default store;

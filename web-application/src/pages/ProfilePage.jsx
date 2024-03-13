@@ -3,11 +3,18 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import StandardButton from "components/common/StandardButton";
 import COLORS from "constants/color";
+import logout from "utils/logout-utils";
+import { deleteUser } from "store/userSlice";
+import { useContext } from "react";
+import { MyContext } from "store";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isUpdate = true;
   const [credentials, setCredentials] = useState({
     username: "",
@@ -17,6 +24,7 @@ const Profile = () => {
   });
   const [disabled, setDisabled] = useState(true);
   const { isLoading, userDetails } = useSelector((state) => state.user);
+  const { modalIsOpen, setIsOpen } = useContext(MyContext);
 
   useEffect(() => {
     if (Object.keys(userDetails).length > 0) {
@@ -39,6 +47,21 @@ const Profile = () => {
     );
   }, [credentials]);
 
+  useEffect(() => {
+    if (modalIsOpen === "DELTEDGO") {
+      setIsOpen("");
+      dispatch(
+        deleteUser({
+          params: { id: credentials.id },
+          callback: () => {
+            logout();
+            navigate("/");
+          },
+        })
+      );
+    }
+  }, [modalIsOpen]);
+
   const changeInCredentials = (event, type) => {
     setCredentials((prev) => {
       return { ...prev, [type]: event.target.value };
@@ -60,6 +83,19 @@ const Profile = () => {
             context={[credentials, changeInCredentials, disabled, isUpdate]}
           />
         )}
+
+        <div style={styles.bottomButton}>
+          <StandardButton
+            onClick={() => setIsOpen("DELTED")}
+            buttonText={"Delete User"}
+            disabled={false}
+          />
+          <StandardButton
+            onClick={() => navigate("/main")}
+            buttonText={"Go back to profile"}
+            disabled={false}
+          />
+        </div>
       </form>
     </div>
   );
@@ -84,6 +120,13 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     gap: 20,
+  },
+  bottomButton: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 50,
+    borderTop: `2px dotted #000`,
+    paddingTop: 20,
   },
 };
 
