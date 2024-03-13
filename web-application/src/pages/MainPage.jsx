@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import ReactLoading from "react-loading";
 import { useDispatch } from "react-redux";
 import { getUser } from "store/userSlice";
+import { getAllUsers } from "store/chatSlice";
 
 import Sidebar from "components/sidebar/SideBar";
 import WorkingArea from "components/workingarea/WorkingArea";
@@ -13,20 +14,39 @@ const Main = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { userDetails } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.user);
+  const isLoadingChat = useSelector((state) => state.chat.isLoading);
 
   const id = localStorage.getItem("id");
 
   useEffect(() => {
+    if (!id) {
+      navigate("/");
+      return;
+    }
+
     dispatch(
       getUser({
         params: { id },
-        callback: () => navigate("/main"),
+        callback: () => {},
       })
     );
   }, []);
 
-  if (isLoading === true) {
+  useEffect(() => {
+    if (Object.keys(userDetails).length > 0) {
+      console.log("I hav been called: ", userDetails.username);
+      dispatch(
+        getAllUsers({
+          params: { username: userDetails.username },
+          callback: () => {},
+        })
+      );
+    }
+  }, [userDetails]);
+
+  if (isLoading === true || isLoadingChat === true) {
     return (
       <ReactLoading type="bubbles" color="#0000FF" height={100} width={50} />
     );

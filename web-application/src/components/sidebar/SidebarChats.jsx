@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import COLORS from "constants/color";
 
-const SidebarChat = ({ item }) => {
-  const { username, timestamp, message } = item;
+const SidebarChat = ({ item, clickUser }) => {
+  const { username, id } = item;
+  const [clicked, setClicked] = useState(false);
+
+  useEffect(() => {
+    if (clicked) {
+      setTimeout(() => {
+        setClicked(false);
+      }, 200);
+    }
+  }, [clicked]);
 
   return (
-    <div style={styles.chatItem}>
+    <div
+      style={{ ...styles.chatItem, opacity: clicked ? 0.5 : 1 }}
+      onClick={() => {
+        setClicked(true);
+        clickUser({ id, username });
+      }}
+    >
       <AccountCircleIcon fontSize="large" color="secondary" />
       <div style={styles.sideBarChat}>
         <div>
@@ -14,32 +29,22 @@ const SidebarChat = ({ item }) => {
             {username}
           </p>
         </div>
-        <div
-          style={{
-            display: "flex",
-            width: 270,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingRight: 10,
-          }}
-        >
-          <p className="paraText" style={{ color: COLORS.SECONDARY }}>
-            {message}
-          </p>
-          <p className="paraText" style={{ color: COLORS.SECONDARY }}>
-            {timestamp}
-          </p>
-        </div>
       </div>
     </div>
   );
 };
 
-const SidebarChats = ({ chatHistory }) => {
+const SidebarChats = ({ chatHistory, clickUser }) => {
   return (
     <div style={styles.container}>
       {chatHistory.map((item) => {
-        return <SidebarChat key={item.key} item={item} />;
+        return (
+          <SidebarChat
+            key={item.key}
+            item={{ ...item, id: item.key }}
+            clickUser={clickUser}
+          />
+        );
       })}
     </div>
   );

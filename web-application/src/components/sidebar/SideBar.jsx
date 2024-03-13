@@ -1,66 +1,48 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import SidebarHeader from "./SidebarHeader";
+import { useSelector } from "react-redux";
 import SidebarChats from "./SidebarChats";
 import CustomTextInput from "components/common/CustomTextInput";
 import COLORS from "constants/color";
 
-const MOCK_CHATS = [
-  {
-    key: 1,
-    username: "User1",
-    message: "stupid boy",
-    timestamp: "19/04/2024",
-  },
-  {
-    key: 2,
-    username: "User1",
-    message: "stupid boy",
-    timestamp: "19/04/2024",
-  },
-  {
-    key: 3,
-    username: "User1",
-    message: "stupid boy",
-    timestamp: "19/04/2024",
-  },
-  {
-    key: 4,
-    username: "User1",
-    message: "stupid boy",
-    timestamp: "19/04/2024",
-  },
-];
-
 const Sidebar = () => {
   const [search, setSearch] = useState("");
+  const [localUsers, setLocalUsers] = useState([]);
+
+  const { users } = useSelector((state) => state.chat);
+
+  useEffect(() => {
+    if (users.length > 0) {
+      let tempUsers = [];
+      // eslint-disable-next-line array-callback-return
+      users.map((item) => {
+        tempUsers.push({
+          key: item.id,
+          username: item.username,
+        });
+      });
+
+      setLocalUsers([...tempUsers]);
+    }
+  }, [users]);
 
   const changeSearch = (event) => {
     setSearch(event.target.value);
-  };
-
-  const plusClick = () => {
-    console.log("Plus clicked");
-  };
-
-  const singleAdd = () => {
-    console.log("Single clicked");
-  };
-
-  const grpAdd = () => {
-    console.log("Group add clicked");
   };
 
   const darkMode = () => {
     console.log("Dark mode clicked");
   };
 
+  const clickUser = (user) => {
+    console.log("User clicked: ", user);
+  };
+
   return (
     <div style={styles.container}>
       <SidebarHeader
         {...{
-          plusClick,
-          singleAdd,
-          grpAdd,
           darkMode,
         }}
       />
@@ -76,7 +58,13 @@ const Sidebar = () => {
         />
       </div>
 
-      <SidebarChats chatHistory={MOCK_CHATS} />
+      <SidebarChats
+        search={search}
+        chatHistory={localUsers.filter((item) =>
+          item.username.match(new RegExp(search, "g"))
+        )}
+        clickUser={clickUser}
+      />
     </div>
   );
 };

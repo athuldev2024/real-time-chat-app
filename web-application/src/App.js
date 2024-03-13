@@ -27,7 +27,6 @@ const App = () => {
             <Route path="/main" Component={MainPage}>
               <Route index Component={MainPage} />
               <Route path="/main/:id" Component={MainPage} />
-              <Route path="/main/create" Component={MainPage} />
             </Route>
 
             <Route path="*" Component={NotFoundPage} />
