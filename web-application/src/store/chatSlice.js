@@ -29,6 +29,7 @@ const chatSlice = createSlice({
     isLoading: false,
     hasError: false,
     users: {},
+    selected: {},
   },
   extraReducers: (builder) => {
     builder
@@ -47,6 +48,13 @@ const chatSlice = createSlice({
         state.hasError = true;
       });
   },
+  reducers: {
+    userSelected: (state, action) => {
+      state.selected = action.payload;
+    },
+  },
 });
+
+export const { userSelected } = chatSlice.actions;
 
 export default chatSlice.reducer;

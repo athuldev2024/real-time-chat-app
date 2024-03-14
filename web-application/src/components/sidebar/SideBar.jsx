@@ -5,8 +5,11 @@ import { useSelector } from "react-redux";
 import SidebarChats from "./SidebarChats";
 import CustomTextInput from "components/common/CustomTextInput";
 import COLORS from "constants/color";
+import { userSelected } from "store/chatSlice";
+import { useDispatch } from "react-redux";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [localUsers, setLocalUsers] = useState([]);
 
@@ -36,7 +39,7 @@ const Sidebar = () => {
   };
 
   const clickUser = (user) => {
-    console.log("User clicked: ", user);
+    dispatch(userSelected({ ...user }));
   };
 
   return (
