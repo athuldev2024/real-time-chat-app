@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import routes from "./src/routes";
 import bodyParser from "body-parser";
 import { config } from "dotenv";
+import socketio from "socket.io";
 
 config({ path: `.env.${process.env.NODE_ENV}` });
 
@@ -31,4 +32,31 @@ app.use("/", routes); // All routes for this application
 
 server.listen(PORT, () => {
   console.log(`Server running in PORT: ${PORT}`);
+});
+
+// Socket.IO
+const io = socketio(server, {
+  cors: {
+    origin: "*",
+  },
+  pingTimeout: 60000,
+});
+
+io.on("connection", (socket) => {
+  console.log(`Socket ${socket.id} connected`);
+
+  socket.on("join_room", (room) => {
+    console.log(`I ${socket.id} have joined this room ${room}`);
+    socket.join(room);
+  });
+
+  socket.on("sendMessage", ({ room, data }) => {
+    console.log("ROOM emit: ", room);
+    console.log("DATA emit: ", data);
+    socket.emit("message_received", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`Socket ${socket.id} disconnected`);
+  });
 });

@@ -28,6 +28,13 @@ const mobile = {
   errorMessage: "Invalid mobile",
 };
 
+const identifier = {
+  notEmpty: true,
+  isInt: true,
+  errorMessage: "Invalid ID",
+  optional: false,
+};
+
 export const createUserValidationSchema = {
   username: { ...username, optional: false },
   password: { ...password, optional: false },
@@ -40,4 +47,20 @@ export const patchUserValidationSchema = {
   password: { ...password, optional: true },
   email: { ...email, optional: true },
   mobile: { ...mobile, optional: true },
+};
+
+const messageSchema = {
+  id: identifier,
+  message: {
+    notEmpty: true,
+    isString: true,
+    errorMessage: "Invalid message",
+  },
+};
+export const chatValidationSchema = {
+  myid: identifier,
+  hisid: identifier,
+  myusername: { ...username, optional: false },
+  hisusername: { ...username, optional: false },
+  message: messageSchema,
 };
