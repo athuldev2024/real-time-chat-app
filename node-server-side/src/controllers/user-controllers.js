@@ -32,7 +32,6 @@ const registerUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const { username, password } = matchedData(req);
-
     const user = await UserModel.findOne({
       username,
     });

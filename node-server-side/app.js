@@ -46,14 +46,14 @@ io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
 
   socket.on("join_room", (room) => {
-    console.log(`I ${socket.id} have joined this room ${room}`);
+    console.log(`${socket.id} joined this room ${room}`);
     socket.join(room);
   });
 
   socket.on("sendMessage", ({ room, data }) => {
     console.log("ROOM emit: ", room);
     console.log("DATA emit: ", data);
-    socket.emit("message_received", data);
+    socket.to(room).emit("message_received", data);
   });
 
   socket.on("disconnect", () => {

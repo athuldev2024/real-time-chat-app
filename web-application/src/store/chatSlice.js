@@ -94,7 +94,7 @@ const chatSlice = createSlice({
       })
       // send message
       .addCase(sendMessage.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = false;
         state.hasError = false;
       })
       .addCase(sendMessage.fulfilled, (state) => {

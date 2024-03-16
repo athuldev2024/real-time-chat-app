@@ -35,7 +35,6 @@ const Main = () => {
 
   useEffect(() => {
     if (Object.keys(userDetails).length > 0) {
-      console.log("I hav been called: ", userDetails.username);
       dispatch(
         getAllUsers({
           params: { username: userDetails.username },

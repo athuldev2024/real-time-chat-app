@@ -7,9 +7,9 @@ import NearMeIcon from "@mui/icons-material/NearMe";
 import { IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { sendMessage, fetchMessages } from "store/chatSlice";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const socket = io.connect("http://localhost:5000");
 
 const Ping = ({ item }) => {
   const { userDetails } = useSelector((state) => state.user);
@@ -49,6 +49,14 @@ const WorkingAreaBody = () => {
   const { userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
+    socket.on("message_received", (data) => {
+      console.log(
+        "MESSAGE from socker =========================================> "
+      );
+    });
+  }, []);
+
+  useEffect(() => {
     dispatch(
       fetchMessages({
         params: {
@@ -59,14 +67,9 @@ const WorkingAreaBody = () => {
       })
     );
 
-    socket.emit(
-      "join_room",
-      JSON.stringify([userDetails.id, selected.id].sort())
-    );
+    const room = [userDetails.id, selected.id].sort().join();
 
-    socket.on("message_received", (data) => {
-      console.log("MESSAGE from socker: ");
-    });
+    socket.emit("join_room", room);
   }, [selected.username]);
 
   useEffect(() => {
@@ -99,9 +102,10 @@ const WorkingAreaBody = () => {
             id: userDetails.id,
             message,
           };
+          const room = [userDetails.id, selected.id].sort().join();
           socket.emit("sendMessage", {
             data: temp,
-            room: JSON.stringify([userDetails.id, selected.id].sort()),
+            room,
           });
         },
       })
