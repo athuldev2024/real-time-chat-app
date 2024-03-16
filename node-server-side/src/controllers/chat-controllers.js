@@ -34,9 +34,6 @@ export const sendMessage = async (req, res, next) => {
       ],
     });
 
-    console.log("user myid: ", user.myid);
-    console.log("user hisid: ", user.hisid);
-
     if (user) {
       await ChatModel.findOneAndUpdate(
         {
