@@ -17,7 +17,7 @@ const Ping = ({ item }) => {
   return (
     <div
       style={{
-        alignSelf: userDetails.id === item.id ? "flex-start" : "flex-end",
+        alignSelf: userDetails.id === item.id ? "flex-end" : "flex-start",
         width: 300,
         height: 60,
         backgroundColor: userDetails.id === item.id ? "aqua" : "lightgreen",
@@ -51,8 +51,18 @@ const WorkingAreaBody = () => {
   useEffect(() => {
     socket.on("message_received", (data) => {
       console.log(
-        "MESSAGE from socker =========================================> "
+        "MESSAGE from socker =========================================> ",
+        data
       );
+
+      setAllMessages((prevData) => [
+        ...prevData,
+        {
+          id: data.id,
+          message: data.message,
+          date: new Date(),
+        },
+      ]);
     });
   }, []);
 
@@ -102,6 +112,16 @@ const WorkingAreaBody = () => {
             id: userDetails.id,
             message,
           };
+
+          setAllMessages((prevData) => [
+            ...prevData,
+            {
+              id: userDetails.id,
+              message,
+              date: new Date(),
+            },
+          ]);
+
           const room = [userDetails.id, selected.id].sort().join();
           socket.emit("sendMessage", {
             data: temp,
@@ -144,7 +164,7 @@ const styles = {
     justifyContent: "space-between",
   },
   messageArea: {
-    height: "90%",
+    height: 400,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
