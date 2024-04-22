@@ -8,7 +8,7 @@ import db from "@models";
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.env.API_PORT || 5000;
+const PORT = process.env.API_PORT;
 
 app.use(cors());
 app.use(bodyParser.json());
