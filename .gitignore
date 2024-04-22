@@ -1,7 +1,7 @@
 # Node side
-node-server-side/node_modules
-node-server-side/.env.dev
+server/node_modules
+server/.env
 
 # React side
-web-application/node_modules
+client/node_modules
 

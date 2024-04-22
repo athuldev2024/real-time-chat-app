@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { checkIfUserExists } from "@middleware/user-middleware";
-import { authenticate, authorize } from "@middleware/auth-middleware";
 import {
   loginUser,
   registerUser,
@@ -8,53 +6,53 @@ import {
   updateUser,
   getUser,
 } from "@controllers/user-controllers";
-import { checkSchema, query, param, check } from "express-validator";
 import {
   createUserValidationSchema,
   patchUserValidationSchema,
 } from "@utils/validate-schema";
+import { checkSchema, query, param, check } from "express-validator";
 
 const router = Router();
 
-router.post(
-  "/register",
-  checkSchema(createUserValidationSchema),
-  checkIfUserExists,
-  registerUser
-);
-
+router.post("/register", checkSchema(createUserValidationSchema), registerUser);
 router.get(
   "/login",
   [
-    query("username", "Invalid username").isString().notEmpty().optional(false),
+    query("mobile", "Invalid mobile").isString().notEmpty().optional(false),
     query("password", "Invalid password").isString().notEmpty().optional(false),
   ],
-  checkIfUserExists,
   loginUser
 );
-
-router.all("/authenticate/:code/:id", authenticate);
-router.all(["/update/:id", "/delete/:id", "/getuser"], authorize);
-
-router.patch(
-  "/update/:id",
-  [param("id", "Invalid ID").isInt().notEmpty().optional(false)],
-  checkSchema(patchUserValidationSchema),
-  checkIfUserExists,
-  updateUser
-);
-
 router.delete(
-  "/delete/:id",
-  [param("id", "Invalid ID").isInt().notEmpty().optional(false)],
-  checkIfUserExists,
+  "/delete/:identifier",
+  [
+    param("identifier", "Invalid identifier")
+      .isInt()
+      .notEmpty()
+      .optional(false),
+  ],
   deleteUser
 );
-
+router.patch(
+  "/update/:identifier",
+  [
+    param("identifier", "Invalid identifier")
+      .isInt()
+      .notEmpty()
+      .optional(false),
+  ],
+  checkSchema(patchUserValidationSchema),
+  updateUser
+);
 router.get(
   "/getuser",
-  [check("id", "Invalid ID").isInt().notEmpty().optional(false).exists()],
-  checkIfUserExists,
+  [
+    check("identifier", "Invalid identifier")
+      .isInt()
+      .notEmpty()
+      .optional(false)
+      .exists(),
+  ],
   getUser
 );
 

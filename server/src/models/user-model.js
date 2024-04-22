@@ -1,12 +1,38 @@
-import mongoose from "mongoose";
+const UserModal = (sequelize, DataTypes) => {
+  return sequelize.define(
+    "users",
+    {
+      identifier: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      hashed: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      mobile: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      timestamps: false,
+    }
+  );
+};
 
-const userSchema = new mongoose.Schema({
-  id: { type: Number, unique: true },
-  email: { type: String, unique: true },
-  username: { type: String, unique: true },
-  password: { type: String },
-  hashed: { type: String },
-  mobile: { type: Number, unique: true },
-});
-
-export default mongoose.model("UserDB", userSchema);
+export default UserModal;

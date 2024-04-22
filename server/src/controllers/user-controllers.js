@@ -1,29 +1,44 @@
-import UserModel from "@models/user-model";
 import bcrypt from "bcryptjs";
-import { matchedData } from "express-validator";
-import { customAlphabet } from "nanoid";
 import statusCodes from "@constants/status-codes";
+import messages from "@constants/message";
+import { matchedData, validationResult } from "express-validator";
+import db from "@models";
 
 const SALT = 10;
-const ID_SIZE = 5;
 
 const registerUser = async (req, res, next) => {
   try {
-    const nanoid = customAlphabet("1234567890", ID_SIZE);
+    const validationErrors = validationResult(req);
+    if (validationErrors?.errors && validationErrors?.errors?.length > 0)
+      return res
+        .status(statusCodes.INVALID_REQUEST)
+        .json({ errors: validationErrors.array() });
+
     const { username, password, mobile, email } = matchedData(req);
     const hashedPassword = await bcrypt.hash(password, SALT);
-    const id = nanoid();
 
-    await UserModel.create({
-      id,
+    const checkIfExists = await db.user.findOne({
+      where: {
+        mobile: String(mobile),
+      },
+    });
+
+    if (checkIfExists)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ message: messages.USER_ALREADY_EXISTS });
+
+    await db.user.create({
       email: email.toLowerCase(),
       username,
       password,
       hashed: hashedPassword,
-      mobile,
+      mobile: String(mobile),
     });
 
-    return res.redirect(`/api/users/authenticate/${statusCodes.CREATED}/${id}`);
+    return res.status(statusCodes.CREATED).json({
+      message: messages.USER_CREATED,
+    });
   } catch (error) {
     next(error);
   }
@@ -31,20 +46,40 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    const { username, password } = matchedData(req);
-    const user = await UserModel.findOne({
-      username,
+    const validationErrors = validationResult(req);
+
+    if (validationErrors?.errors && validationErrors?.errors?.length > 0)
+      return res
+        .status(statusCodes.INVALID_REQUEST)
+        .json({ errors: validationErrors.array() });
+
+    const { mobile, password } = matchedData(req);
+
+    const existingUser = await db.user.findOne({
+      where: {
+        mobile: String(mobile),
+      },
     });
 
-    if (user && (await bcrypt.compare(password, user?.hashed))) {
-      return res.redirect(
-        `/api/users/authenticate/${statusCodes.SUCCESS}/${user.id}`
-      );
-    }
+    if (!existingUser)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ message: messages.USER_NOT_ALREADY_EXISTS });
 
-    res
-      .status(statusCodes.NOT_AUTHENTICATED)
-      .json({ message: "Unauthorized access." });
+    const match = await bcrypt.compare(
+      password,
+      existingUser?.dataValues?.hashed
+    );
+
+    if (!match)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ message: messages.FAILURE });
+
+    return res.status(statusCodes.SUCCESS).json({
+      message: messages.LOGGED_IN,
+      identifier: existingUser?.dataValues?.identifier,
+    });
   } catch (error) {
     next(error);
   }
@@ -52,9 +87,20 @@ const loginUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const { id } = matchedData(req);
+    const { identifier } = matchedData(req);
 
-    await UserModel.deleteOne({ id });
+    const existingUser = await db.user.findOne({
+      where: {
+        identifier: identifier,
+      },
+    });
+
+    if (!existingUser)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ message: messages.USER_NOT_ALREADY_EXISTS });
+
+    await db.user.destroy({ where: { identifier: identifier } });
 
     return res.status(statusCodes.DELETED).send("User deleted.");
   } catch (error) {
@@ -75,9 +121,11 @@ const updateUser = async (req, res, next) => {
       ...(updateDetails.dob ? { dob: new Date(updateDetails.dob) } : {}),
     };
 
-    await UserModel.findOneAndUpdate({ id: updateDetails.id }, updateToDB);
+    await db.user.update(updateToDB, { where: { id: updateDetails.id } });
 
-    return res.status(statusCodes.UPDATED).json({ message: "User updated." });
+    return res
+      .status(statusCodes.UPDATED)
+      .json({ message: messages.USER_UPDATED });
   } catch (error) {
     next(error);
   }
@@ -85,19 +133,26 @@ const updateUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const { id } = matchedData(req);
+    const { identifier } = matchedData(req);
 
-    const user = await UserModel.findOne({
-      id,
+    const existingUser = await db.user.findOne({
+      where: {
+        identifier: identifier,
+      },
     });
 
-    if (user) {
+    if (!existingUser)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ message: messages.USER_NOT_ALREADY_EXISTS });
+
+    if (existingUser?.dataValues) {
       return res.status(statusCodes.SUCCESS).json({
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        password: user.password,
-        mobile: user.mobile,
+        identifier: existingUser?.dataValues?.identifier,
+        email: existingUser?.dataValues?.email,
+        username: existingUser?.dataValues?.username,
+        password: existingUser?.dataValues?.password,
+        mobile: existingUser?.dataValues?.mobile,
       });
     } else {
       return res

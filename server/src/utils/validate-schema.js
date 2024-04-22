@@ -48,19 +48,3 @@ export const patchUserValidationSchema = {
   email: { ...email, optional: true },
   mobile: { ...mobile, optional: true },
 };
-
-const messageSchema = {
-  id: identifier,
-  message: {
-    notEmpty: true,
-    isString: true,
-    errorMessage: "Invalid message",
-  },
-};
-export const chatValidationSchema = {
-  myid: identifier,
-  hisid: identifier,
-  myusername: { ...username, optional: false },
-  hisusername: { ...username, optional: false },
-  message: messageSchema,
-};
