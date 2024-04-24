@@ -1,19 +1,13 @@
 import bcrypt from "bcryptjs";
 import statusCodes from "@constants/status-codes";
 import messages from "@constants/message";
-import { matchedData, validationResult } from "express-validator";
+import { matchedData } from "express-validator";
 import db from "@models";
 
 const SALT = 10;
 
 const registerUser = async (req, res, next) => {
   try {
-    const validationErrors = validationResult(req);
-    if (validationErrors?.errors && validationErrors?.errors?.length > 0)
-      return res
-        .status(statusCodes.INVALID_REQUEST)
-        .json({ errors: validationErrors.array() });
-
     const { username, password, mobile, email } = matchedData(req);
     const hashedPassword = await bcrypt.hash(password, SALT);
 
@@ -46,13 +40,6 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    const validationErrors = validationResult(req);
-
-    if (validationErrors?.errors && validationErrors?.errors?.length > 0)
-      return res
-        .status(statusCodes.INVALID_REQUEST)
-        .json({ errors: validationErrors.array() });
-
     const { mobile, password } = matchedData(req);
 
     const existingUser = await db.user.findOne({
@@ -64,7 +51,7 @@ const loginUser = async (req, res, next) => {
     if (!existingUser)
       return res
         .status(statusCodes.CONFLICT)
-        .json({ message: messages.USER_NOT_ALREADY_EXISTS });
+        .json({ message: messages.USER_NOT_EXISTS });
 
     const match = await bcrypt.compare(
       password,
@@ -98,7 +85,7 @@ const deleteUser = async (req, res, next) => {
     if (!existingUser)
       return res
         .status(statusCodes.CONFLICT)
-        .json({ message: messages.USER_NOT_ALREADY_EXISTS });
+        .json({ message: messages.USER_NOT_EXISTS });
 
     await db.user.destroy({ where: { identifier: identifier } });
 
@@ -112,6 +99,17 @@ const updateUser = async (req, res, next) => {
   try {
     const updateDetails = matchedData(req);
 
+    const existingUser = await db.user.findOne({
+      where: {
+        identifier: updateDetails.identifier,
+      },
+    });
+
+    if (!existingUser)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ message: messages.USER_NOT_EXISTS });
+
     const updateToDB = {
       ...updateDetails,
       ...(updateDetails.password && {
@@ -121,7 +119,9 @@ const updateUser = async (req, res, next) => {
       ...(updateDetails.dob ? { dob: new Date(updateDetails.dob) } : {}),
     };
 
-    await db.user.update(updateToDB, { where: { id: updateDetails.id } });
+    await db.user.update(updateToDB, {
+      where: { identifier: updateDetails.identifier },
+    });
 
     return res
       .status(statusCodes.UPDATED)
@@ -131,37 +131,4 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const getUser = async (req, res, next) => {
-  try {
-    const { identifier } = matchedData(req);
-
-    const existingUser = await db.user.findOne({
-      where: {
-        identifier: identifier,
-      },
-    });
-
-    if (!existingUser)
-      return res
-        .status(statusCodes.CONFLICT)
-        .json({ message: messages.USER_NOT_ALREADY_EXISTS });
-
-    if (existingUser?.dataValues) {
-      return res.status(statusCodes.SUCCESS).json({
-        identifier: existingUser?.dataValues?.identifier,
-        email: existingUser?.dataValues?.email,
-        username: existingUser?.dataValues?.username,
-        password: existingUser?.dataValues?.password,
-        mobile: existingUser?.dataValues?.mobile,
-      });
-    } else {
-      return res
-        .status(statusCodes.NOT_FOUND)
-        .json({ message: "No user found." });
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-
-export { loginUser, registerUser, deleteUser, updateUser, getUser };
+export { loginUser, registerUser, deleteUser, updateUser };

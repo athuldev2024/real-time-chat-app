@@ -28,6 +28,10 @@ const UserModal = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      profilename: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       timestamps: false,

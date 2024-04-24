@@ -1,6 +1,7 @@
 # Node side
 server/node_modules
 server/.env
+server/public/*
 
 # React side
 client/node_modules

@@ -13,7 +13,7 @@ const PORT = process.env.API_PORT;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static("public"));
+app.use(express.static("src/public"));
 
 app.use("/", routes);
 

@@ -4,25 +4,33 @@ import {
   registerUser,
   deleteUser,
   updateUser,
-  getUser,
 } from "@controllers/user-controllers";
 import {
   createUserValidationSchema,
   patchUserValidationSchema,
 } from "@utils/validate-schema";
-import { checkSchema, query, param, check } from "express-validator";
+import { checkSchema, query, param } from "express-validator";
+import { checkIfValidationErrors } from "@middleware/error-middleware";
 
 const router = Router();
 
-router.post("/register", checkSchema(createUserValidationSchema), registerUser);
+router.post(
+  "/register",
+  checkSchema(createUserValidationSchema),
+  checkIfValidationErrors,
+  registerUser
+);
+
 router.get(
   "/login",
   [
     query("mobile", "Invalid mobile").isString().notEmpty().optional(false),
     query("password", "Invalid password").isString().notEmpty().optional(false),
   ],
+  checkIfValidationErrors,
   loginUser
 );
+
 router.delete(
   "/delete/:identifier",
   [
@@ -31,8 +39,10 @@ router.delete(
       .notEmpty()
       .optional(false),
   ],
+  checkIfValidationErrors,
   deleteUser
 );
+
 router.patch(
   "/update/:identifier",
   [
@@ -42,18 +52,8 @@ router.patch(
       .optional(false),
   ],
   checkSchema(patchUserValidationSchema),
+  checkIfValidationErrors,
   updateUser
-);
-router.get(
-  "/getuser",
-  [
-    check("identifier", "Invalid identifier")
-      .isInt()
-      .notEmpty()
-      .optional(false)
-      .exists(),
-  ],
-  getUser
 );
 
 export default router;
