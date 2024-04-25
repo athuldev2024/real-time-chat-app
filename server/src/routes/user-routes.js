@@ -4,12 +4,13 @@ import {
   registerUser,
   deleteUser,
   updateUser,
+  getAllUsersExceptMe,
 } from "@controllers/user-controllers";
 import {
   createUserValidationSchema,
   patchUserValidationSchema,
 } from "@utils/validate-schema";
-import { checkSchema, query, param } from "express-validator";
+import { checkSchema, query, param, check } from "express-validator";
 import { checkIfValidationErrors } from "@middleware/error-middleware";
 
 const router = Router();
@@ -54,6 +55,18 @@ router.patch(
   checkSchema(patchUserValidationSchema),
   checkIfValidationErrors,
   updateUser
+);
+
+router.get(
+  "/allusersexpectme/:identifier",
+  [
+    check("identifier", "Invalid identifier")
+      .isInt()
+      .notEmpty()
+      .optional(false),
+  ],
+  checkIfValidationErrors,
+  getAllUsersExceptMe
 );
 
 export default router;

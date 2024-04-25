@@ -3,6 +3,7 @@ import statusCodes from "@constants/status-codes";
 import messages from "@constants/message";
 import { matchedData } from "express-validator";
 import db from "@models";
+import { Op } from "sequelize";
 
 const SALT = 10;
 
@@ -131,4 +132,25 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-export { loginUser, registerUser, deleteUser, updateUser };
+const getAllUsersExceptMe = async (req, res, next) => {
+  try {
+    const { identifier } = matchedData(req);
+
+    const allUsers = await db.user.findAll({
+      attributes: ["identifier", "mobile", "username", "email"],
+      where: {
+        identifier: {
+          [Op.ne]: identifier,
+        },
+      },
+    });
+
+    return res.status(statusCodes.SUCCESS).json({
+      allUsers,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { loginUser, registerUser, deleteUser, updateUser, getAllUsersExceptMe };
