@@ -32,7 +32,7 @@ const registerUser = async (req, res, next) => {
     });
 
     await newUser.createUpload({
-      profilename: "",
+      profilename: "placeholder - Will add later",
     });
 
     return res.status(statusCodes.CREATED).json({

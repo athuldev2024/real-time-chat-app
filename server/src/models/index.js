@@ -30,10 +30,14 @@ const db = {
 };
 
 db.user.hasOne(db.upload, {
-  foriegnkey: "identifier",
+  foreignKey: "identifier",
   onUpdate: "CASCADE",
   onDelete: "CASCADE",
 });
-db.upload.belongsTo(db.user, { onUpdate: "CASCADE", onDelete: "CASCADE" });
+db.upload.belongsTo(db.user, {
+  foreignKey: "identifier",
+  onUpdate: "CASCADE",
+  onDelete: "CASCADE",
+});
 
 export default db;
