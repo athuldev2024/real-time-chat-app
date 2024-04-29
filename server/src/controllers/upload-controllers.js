@@ -10,7 +10,7 @@ export const userUploadSingleFile = async (req, res, next) => {
     const { identifier } = matchedData(req);
     const fileName = req.file.originalname;
 
-    const existingUser = await db.user.findOne({
+    const existingUser = await db.upload.findOne({
       where: {
         identifier: identifier,
       },
@@ -23,7 +23,7 @@ export const userUploadSingleFile = async (req, res, next) => {
 
     console.log("FILENAME: ", fileName);
 
-    await db.user.update(
+    await db.upload.update(
       { profilename: fileName },
       {
         where: { identifier: identifier },
@@ -42,7 +42,7 @@ export const previewSingleFile = async (req, res, next) => {
   try {
     const { identifier } = matchedData(req);
 
-    const existingUser = await db.user.findOne({
+    const existingUser = await db.upload.findOne({
       where: {
         identifier: identifier,
       },

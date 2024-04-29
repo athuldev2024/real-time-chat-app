@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
-import UserModal from "./user-model";
+import UserModel from "./user-model";
+import UploadModel from "./upload-model";
 import messages from "@constants/message";
 import "dotenv/config";
 
@@ -24,7 +25,15 @@ sequelize
 
 const db = {
   sequelize,
-  user: UserModal(sequelize, DataTypes),
+  user: UserModel(sequelize, DataTypes),
+  upload: UploadModel(sequelize, DataTypes),
 };
+
+db.user.hasOne(db.upload, {
+  foriegnkey: "identifier",
+  onUpdate: "CASCADE",
+  onDelete: "CASCADE",
+});
+db.upload.belongsTo(db.user, { onUpdate: "CASCADE", onDelete: "CASCADE" });
 
 export default db;

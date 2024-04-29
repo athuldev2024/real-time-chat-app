@@ -1,4 +1,4 @@
-const UserModal = (sequelize, DataTypes) => {
+const UserModel = (sequelize, DataTypes) => {
   return sequelize.define(
     "users",
     {
@@ -39,4 +39,4 @@ const UserModal = (sequelize, DataTypes) => {
   );
 };
 
-export default UserModal;
+export default UserModel;

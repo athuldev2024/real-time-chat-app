@@ -18,7 +18,7 @@ app.use(express.static("src/public"));
 app.use("/", routes);
 
 db.sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     console.log("Sync success");
   })

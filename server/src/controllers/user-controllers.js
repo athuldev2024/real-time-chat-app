@@ -23,12 +23,16 @@ const registerUser = async (req, res, next) => {
         .status(statusCodes.CONFLICT)
         .json({ message: messages.USER_ALREADY_EXISTS });
 
-    await db.user.create({
+    const newUser = await db.user.create({
       email: email.toLowerCase(),
       username,
       password,
       hashed: hashedPassword,
       mobile: String(mobile),
+    });
+
+    await newUser.createUpload({
+      profilename: "",
     });
 
     return res.status(statusCodes.CREATED).json({
@@ -90,7 +94,9 @@ const deleteUser = async (req, res, next) => {
 
     await db.user.destroy({ where: { identifier: identifier } });
 
-    return res.status(statusCodes.DELETED).send("User deleted.");
+    return res
+      .status(statusCodes.DELETED)
+      .json({ message: messages.USER_DELETED });
   } catch (error) {
     next(error);
   }
