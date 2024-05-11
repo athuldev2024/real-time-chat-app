@@ -10,7 +10,7 @@ import image from "assets/login-image.avif";
 const InitialPage = () => {
   const location = useLocation();
   const { isLoading } = useSelector((state) => state.user);
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -35,12 +35,13 @@ const InitialPage = () => {
         credentials.username &&
           credentials.password &&
           credentials.mobile &&
-          credentials.email
+          credentials.email &&
+          confirmPassword
           ? false
           : true
       );
     }
-  }, [credentials, location.pathname]);
+  }, [credentials, location.pathname, confirmPassword]);
 
   const changeInCredentials = (event, type) => {
     setCredentials((prev) => {
@@ -70,7 +71,15 @@ const InitialPage = () => {
             >
               {header}
             </p>
-            <Outlet context={[credentials, changeInCredentials, disabled]} />
+            <Outlet
+              context={[
+                credentials,
+                changeInCredentials,
+                disabled,
+                confirmPassword,
+                setConfirmPassword,
+              ]}
+            />
           </div>
         </div>
       )}

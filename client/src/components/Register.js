@@ -10,10 +10,15 @@ import { showToastMessage } from "utils/toast-utils";
 import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
-  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [credentials, changeInCredentials, disabled] = useOutletContext();
+  const [
+    credentials,
+    changeInCredentials,
+    disabled,
+    confirmPassword,
+    setConfirmPassword,
+  ] = useOutletContext();
 
   const registerNewUser = (event) => {
     event.preventDefault();
@@ -28,7 +33,7 @@ const Register = () => {
         })
       );
     } else {
-      showToastMessage(MESSAGES?.need_conform_password);
+      showToastMessage(MESSAGES?.password_not_match);
     }
   };
 

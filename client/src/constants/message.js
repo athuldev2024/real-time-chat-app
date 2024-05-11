@@ -2,7 +2,7 @@ const MESSAGES = {
   error_message: "Something went wrong!!",
   login_user: "LOGIN USER",
   register_user: "REGISTER USER",
-  need_conform_password: "Confirm password is needed.",
+  password_not_match: "Password and confirm password does not match.",
 };
 
 export default MESSAGES;
