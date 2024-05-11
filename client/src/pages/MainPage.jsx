@@ -6,8 +6,6 @@ import ReactLoading from "react-loading";
 import { useDispatch } from "react-redux";
 import { getUser } from "store/userSlice";
 import { getAllUsers } from "store/chatSlice";
-import Sidebar from "components/sidebar/SideBar";
-import WorkingArea from "components/workingarea/WorkingArea";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -19,30 +17,16 @@ const Main = () => {
 
   const id = localStorage.getItem("id");
 
-  useEffect(() => {
-    if (!id) {
-      navigate("/");
-      return;
-    }
-
-    dispatch(
-      getUser({
-        params: { id },
-        callback: () => {},
-      })
-    );
-  }, []);
-
-  useEffect(() => {
-    if (Object.keys(userDetails).length > 0) {
-      dispatch(
-        getAllUsers({
-          params: { username: userDetails.username },
-          callback: () => {},
-        })
-      );
-    }
-  }, [userDetails]);
+  // useEffect(() => {
+  //   if (Object.keys(userDetails).length > 0) {
+  //     dispatch(
+  //       getAllUsers({
+  //         params: { username: userDetails.username },
+  //         callback: () => {},
+  //       })
+  //     );
+  //   }
+  // }, [userDetails]);
 
   if (isLoading === true || isLoadingChat === true) {
     return (
@@ -50,12 +34,7 @@ const Main = () => {
     );
   }
 
-  return (
-    <div style={styles.container}>
-      <Sidebar />
-      <WorkingArea />
-    </div>
-  );
+  return <div style={styles.container}></div>;
 };
 
 const styles = {

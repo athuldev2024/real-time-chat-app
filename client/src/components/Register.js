@@ -12,17 +12,11 @@ import "react-toastify/dist/ReactToastify.css";
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [
-    credentials,
-    changeInCredentials,
-    disabled,
-    confirmPassword,
-    setConfirmPassword,
-  ] = useOutletContext();
+  const [credentials, changeInCredentials, disabled] = useOutletContext();
 
   const registerNewUser = (event) => {
     event.preventDefault();
-    if (confirmPassword === credentials.password) {
+    if (credentials.confirm === credentials.password) {
       dispatch(
         registerUser({
           body: { ...credentials },
@@ -56,8 +50,8 @@ const Register = () => {
       <CustomTextInput
         type={"password"}
         autoComplete={"off"}
-        value={confirmPassword}
-        onChange={setConfirmPassword}
+        value={credentials.confirm}
+        onChange={(event) => changeInCredentials(event, "confirm")}
         placeholder={"confirm password"}
       />
       <CustomTextInput

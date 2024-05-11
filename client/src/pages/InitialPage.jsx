@@ -10,16 +10,24 @@ import image from "assets/login-image.avif";
 const InitialPage = () => {
   const location = useLocation();
   const { isLoading } = useSelector((state) => state.user);
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
     mobile: "",
     email: "",
+    confirm: "",
   });
   const [disabled, setDisabled] = useState(true);
 
   const header = useMemo(() => {
+    setCredentials({
+      username: "",
+      password: "",
+      mobile: "",
+      email: "",
+      confirm: "",
+    });
+
     if (location.pathname === "/") {
       return MESSAGES.login_user;
     } else {
@@ -36,12 +44,12 @@ const InitialPage = () => {
           credentials.password &&
           credentials.mobile &&
           credentials.email &&
-          confirmPassword
+          credentials.confirm
           ? false
           : true
       );
     }
-  }, [credentials, location.pathname, confirmPassword]);
+  }, [credentials, location.pathname]);
 
   const changeInCredentials = (event, type) => {
     setCredentials((prev) => {
@@ -71,15 +79,7 @@ const InitialPage = () => {
             >
               {header}
             </p>
-            <Outlet
-              context={[
-                credentials,
-                changeInCredentials,
-                disabled,
-                confirmPassword,
-                setConfirmPassword,
-              ]}
-            />
+            <Outlet context={[credentials, changeInCredentials, disabled]} />
           </div>
         </div>
       )}
