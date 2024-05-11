@@ -1,5 +1,6 @@
 import React from "react";
 import COLORS from "constants/color";
+import MESSAGES from "constants/message";
 import { useNavigate } from "react-router-dom";
 import StandardButton from "components/common/StandardButton";
 import image from "assets/no-page-image.png";
@@ -15,7 +16,7 @@ const NotFoundPage = () => {
     <div style={styles.container}>
       <img src={image} alt="404 page" width={400} height={300} />
       <StandardButton
-        buttonText={"Go back to main page"}
+        buttonText={MESSAGES.go_back}
         onClick={navigateFromHere}
         disabled={false}
       />
