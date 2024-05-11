@@ -8,7 +8,7 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   const navigateFromHere = () => {
-    navigate("/");
+    navigate("/main");
   };
 
   return (

@@ -20,9 +20,6 @@ const App = () => {
               <Route index Component={Login} />
               <Route path="/register" Component={Register} />
             </Route>
-            <Route path="/profile" Component={ProfilePage}>
-              <Route index Component={Register} />
-            </Route>
             <Route path="/main" Component={MainPage}>
               <Route index Component={MainPage} />
               <Route path="/main/:id" Component={MainPage} />
