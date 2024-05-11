@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "store";
 import InitialPage from "pages/InitialPage";
-import ProfilePage from "pages/ProfilePage";
 import MainPage from "pages/MainPage";
 import NotFoundPage from "pages/NotFoundPage";
 import Login from "components/Login";
@@ -21,8 +20,7 @@ const App = () => {
               <Route path="/register" Component={Register} />
             </Route>
             <Route path="/main" Component={MainPage}>
-              <Route index Component={MainPage} />
-              <Route path="/main/:id" Component={MainPage} />
+              {/* <Route index Component={MainPage} /> */}
             </Route>
             <Route path="*" Component={NotFoundPage} />
           </Routes>

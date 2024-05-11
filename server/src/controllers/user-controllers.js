@@ -37,6 +37,7 @@ const registerUser = async (req, res, next) => {
 
     return res.status(statusCodes.CREATED).json({
       message: messages.USER_CREATED,
+      identifier: newUser?.dataValues?.identifier,
     });
   } catch (error) {
     next(error);

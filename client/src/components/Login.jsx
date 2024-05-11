@@ -23,7 +23,7 @@ const Login = () => {
           password: credentials.password,
         },
         callback: (data) => {
-          localStorage.setItem("id", data.id);
+          localStorage.setItem("identifier", data.identifier);
           navigate("/main");
         },
       })

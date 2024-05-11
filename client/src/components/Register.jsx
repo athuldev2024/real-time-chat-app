@@ -22,7 +22,7 @@ const Register = () => {
         registerUser({
           body: { ...credentials },
           callback: (data) => {
-            localStorage.setItem("id", data.id);
+            localStorage.setItem("identifier", data.identifier);
             navigate("/main");
           },
         })

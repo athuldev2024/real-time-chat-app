@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import MESSAGES from "constants/message";
 import api from "api";
 
-export const fileUpload = createAsyncThunk(
+export const fileSingleUpload = createAsyncThunk(
   "upload/fileUpload",
-  async ({ body, headers, callback }, thunkAPI) => {
+  async ({ body, headers, params, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `uploads/uploadprofile`,
+        path: `uploads/uploadsingle`,
         method: "POST",
-        params: {},
+        params,
         body,
         headers,
       });
@@ -53,15 +53,15 @@ const uploadSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // file upload
-      .addCase(fileUpload.pending, (state) => {
+      .addCase(fileSingleUpload.pending, (state) => {
         state.isLoading = true;
         state.hasError = false;
       })
-      .addCase(fileUpload.fulfilled, (state) => {
+      .addCase(fileSingleUpload.fulfilled, (state) => {
         state.isLoading = false;
         state.hasError = false;
       })
-      .addCase(fileUpload.rejected, (state) => {
+      .addCase(fileSingleUpload.rejected, (state) => {
         state.isLoading = false;
         state.hasError = true;
       })
