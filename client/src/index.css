@@ -29,3 +29,10 @@
   text-overflow: ellipsis;
   font-size: 0.9rem;
 }
+.infoBoxText {
+  font-family: "Madimi One", sans-serif;
+  font-style: italic;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  color: #d3d3d3;
+}

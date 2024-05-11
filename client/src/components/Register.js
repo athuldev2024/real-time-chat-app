@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
+import Box from "@mui/material/Box";
 import { useDispatch } from "react-redux";
 import { registerUser } from "store/userSlice";
 import COLORS from "constants/color";
@@ -68,6 +69,14 @@ const Register = () => {
         onChange={(event) => changeInCredentials(event, "email")}
         placeholder={"email"}
       />
+
+      <Box component="section" sx={{ p: 2, border: "1px dashed grey" }}>
+        <p className="infoBoxText">
+          {MESSAGES?.register_instruction.split(".")[0]}
+          <br />
+          {MESSAGES?.register_instruction.split(".")[1]}
+        </p>
+      </Box>
 
       <div
         style={{
