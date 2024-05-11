@@ -12,18 +12,18 @@ import MenuItem from "@mui/material/MenuItem";
 import logout from "utils/logout-utils";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fileSingleUpload } from "store/uploadSlice";
+import { fileSingleUpload, getSingleFile } from "store/uploadSlice";
 
 const SETTINGS = ["Edit Profile picture", "Logout"];
 
 function Header() {
-  const identifier = localStorage.getItem("identifier");
   const dispatch = useDispatch();
   const fileUploadRef = useRef(null);
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [file, setFile] = useState();
+  const [profileImg, setProfileImg] = useState();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -50,6 +50,19 @@ function Header() {
   };
 
   useEffect(() => {
+    const identifier = localStorage.getItem("identifier");
+    dispatch(
+      getSingleFile({
+        identifier,
+        callback: (res) => {
+          setProfileImg(res.request.responseURL);
+        },
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (file) {
       const formData = new FormData();
       const ext = file.name.split(".")[1].toLowerCase();
@@ -59,22 +72,22 @@ function Header() {
         return;
       }
 
+      const identifier = localStorage.getItem("identifier");
       formData.append("file", file, file.name.toLowerCase());
       const headers = {
         "content-type": "multipart/form-data",
       };
 
-      console.log("identifier: ", identifier);
-
-      // dispatch(
-      //   fileSingleUpload({
-      //     body: formData,
-      //     headers,
-      //     params: {
-      //       identifier: id,
-      //     },
-      //   })
-      // );
+      dispatch(
+        fileSingleUpload({
+          body: formData,
+          headers,
+          identifier,
+          callback: () => {
+            setProfileImg(URL.createObjectURL(file));
+          },
+        })
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
@@ -103,7 +116,15 @@ function Header() {
             />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <img
+                  alt="Profile not visible"
+                  src={profileImg}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 40,
+                  }}
+                />
               </IconButton>
             </Tooltip>
             <Menu

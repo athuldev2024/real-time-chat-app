@@ -3,13 +3,13 @@ import MESSAGES from "constants/message";
 import api from "api";
 
 export const fileSingleUpload = createAsyncThunk(
-  "upload/fileUpload",
-  async ({ body, headers, params, callback }, thunkAPI) => {
+  "upload/fileSingleUpload",
+  async ({ body, headers, identifier, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `uploads/uploadsingle`,
+        path: `uploads/uploadsingle/${identifier}`,
         method: "POST",
-        params,
+        params: {},
         body,
         headers,
       });
@@ -23,14 +23,14 @@ export const fileSingleUpload = createAsyncThunk(
   }
 );
 
-export const getFile = createAsyncThunk(
-  "upload/getFile",
-  async ({ params, callback }, thunkAPI) => {
+export const getSingleFile = createAsyncThunk(
+  "upload/getSingleFile",
+  async ({ identifier, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `uploads/retrieve`,
+        path: `uploads/previewsingle/${identifier}`,
         method: "GET",
-        params,
+        params: {},
         body: {},
       });
 
@@ -66,16 +66,16 @@ const uploadSlice = createSlice({
         state.hasError = true;
       })
       // get file
-      .addCase(getFile.pending, (state) => {
+      .addCase(getSingleFile.pending, (state) => {
         state.isLoading = true;
         state.hasError = false;
       })
-      .addCase(getFile.fulfilled, (state, action) => {
+      .addCase(getSingleFile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasError = false;
         state.profile = action.payload;
       })
-      .addCase(getFile.rejected, (state) => {
+      .addCase(getSingleFile.rejected, (state) => {
         state.isLoading = false;
         state.hasError = true;
       });
