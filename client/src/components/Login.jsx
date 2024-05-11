@@ -5,7 +5,6 @@ import StandardButton from "components/common/StandardButton";
 import { useDispatch } from "react-redux";
 import { loginUser } from "store/userSlice";
 import COLORS from "constants/color";
-
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {

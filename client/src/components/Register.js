@@ -1,41 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
 import { useDispatch } from "react-redux";
-import { registerUser, updateUser } from "store/userSlice";
+import { registerUser } from "store/userSlice";
 import COLORS from "constants/color";
-
+import MESSAGES from "constants/message";
+import { showToastMessage } from "utils/toast-utils";
 import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [credentials, changeInCredentials, disabled, isUpdate] =
-    useOutletContext();
+  const [credentials, changeInCredentials, disabled] = useOutletContext();
 
-  const registerFunc = (event) => {
+  const registerNewUser = (event) => {
     event.preventDefault();
-
-    dispatch(
-      registerUser({
-        body: { ...credentials },
-        callback: (data) => {
-          localStorage.setItem("id", data.id);
-          navigate("/main");
-        },
-      })
-    );
-  };
-
-  const updateFunc = (event) => {
-    event.preventDefault();
-    dispatch(
-      updateUser({
-        body: { ...credentials },
-        callback: () => navigate("/main"),
-      })
-    );
+    if (confirmPassword === credentials.password) {
+      dispatch(
+        registerUser({
+          body: { ...credentials },
+          callback: (data) => {
+            localStorage.setItem("id", data.id);
+            navigate("/main");
+          },
+        })
+      );
+    } else {
+      showToastMessage(MESSAGES?.need_conform_password);
+    }
   };
 
   return (
@@ -55,7 +49,14 @@ const Register = () => {
         placeholder={"password"}
       />
       <CustomTextInput
-        type={"text"}
+        type={"password"}
+        autoComplete={"off"}
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+        placeholder={"confirm password"}
+      />
+      <CustomTextInput
+        type={"number"}
         autoComplete={"off"}
         value={credentials.mobile}
         onChange={(event) => changeInCredentials(event, "mobile")}
@@ -81,29 +82,23 @@ const Register = () => {
           style={{
             opacity: disabled ? 0.7 : 1,
           }}
-          onClick={(event) => {
-            isUpdate ? updateFunc(event) : registerFunc(event);
-          }}
-          buttonText={!isUpdate ? "Register" : "Update"}
+          onClick={registerNewUser}
+          buttonText={"Register New User"}
           disabled={disabled}
         />
 
-        {!isUpdate && (
-          <>
-            <div style={styles.verticalLine}></div>
-            <p
-              onClick={() => {
-                navigate("/");
-              }}
-              style={{
-                color: "#0000cc",
-                textDecoration: "underline",
-              }}
-            >
-              Login User
-            </p>
-          </>
-        )}
+        <div style={styles.verticalLine}></div>
+        <p
+          onClick={() => {
+            navigate("/");
+          }}
+          style={{
+            color: COLORS.PRIMARY,
+            textDecoration: "underline",
+          }}
+        >
+          Login User
+        </p>
       </div>
     </>
   );
