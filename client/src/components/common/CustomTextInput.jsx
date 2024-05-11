@@ -24,6 +24,12 @@ const CustomTextInput = (props) => {
         value={value}
         onChange={onChange}
         autoComplete={autoComplete ?? "off"}
+        onKeyDown={(event) => {
+          type === "number" &&
+            event.key === "e" &&
+            event.key === "E" &&
+            event.preventDefault();
+        }}
       />
     </div>
   );
