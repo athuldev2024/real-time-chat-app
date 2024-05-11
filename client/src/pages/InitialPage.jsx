@@ -4,10 +4,13 @@ import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
 import COLORS from "constants/color";
+import MESSAGES from "constants/message";
 import image from "assets/login-image.avif";
 
-const Login = () => {
+const InitialPage = () => {
   const location = useLocation();
+  const { isLoading } = useSelector((state) => state.user);
+
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -18,17 +21,15 @@ const Login = () => {
 
   const header = useMemo(() => {
     if (location.pathname === "/") {
-      return "Login user";
+      return MESSAGES.login_user;
     } else {
-      return "Register new user";
+      return MESSAGES.register_user;
     }
   }, [location]);
 
-  const { isLoading } = useSelector((state) => state.user);
-
   useEffect(() => {
     if (location.pathname === "/") {
-      setDisabled(credentials.username && credentials.password ? false : true);
+      setDisabled(credentials.mobile && credentials.password ? false : true);
     } else if (location.pathname === "/register") {
       setDisabled(
         credentials.username &&
@@ -50,17 +51,22 @@ const Login = () => {
   return (
     <form name="login_register">
       {isLoading === true ? (
-        <ReactLoading type="bubbles" color="#0000FF" height={100} width={50} />
+        <ReactLoading
+          type="bubbles"
+          color={COLORS.PRIMARY}
+          height={100}
+          width={50}
+        />
       ) : (
         <div style={styles.container}>
-          <div style={styles.leftImage}>
+          <div style={styles.leftSide}>
             <img src={image} alt="login page" width={400} height={300} />
           </div>
 
-          <div style={styles.form}>
+          <div style={styles.rightSide}>
             <p
               className="headingText"
-              style={{ fontSize: "2rem", color: "#59981A" }}
+              style={{ fontSize: "2rem", color: COLORS.SECONDARY }}
             >
               {header}
             </p>
@@ -82,13 +88,13 @@ const styles = {
     display: "flex",
     flexDirection: "row",
   },
-  leftImage: {
+  leftSide: {
     flex: 0.5,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
-  form: {
+  rightSide: {
     flex: 0.5,
     display: "flex",
     flexDirection: "column",
@@ -98,4 +104,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default InitialPage;

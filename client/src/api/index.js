@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ERROR_MESSAGE } from "constants/message";
+import MESSAGES from "constants/message";
 import { showToastMessage } from "utils/toast-utils";
 
 const URL = "http://localhost:5000/api/";
@@ -16,7 +16,7 @@ function api({ path, method, params, body }) {
     })
       .then(function (response) {
         if (!SUCCESS_MESSAGE_ARR.includes(Number(response.status))) {
-          throw new Error(ERROR_MESSAGE);
+          throw new Error(MESSAGES.error_message);
         } else {
           resolve(response);
         }

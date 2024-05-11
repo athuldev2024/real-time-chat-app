@@ -3,81 +3,10 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
 import { useDispatch } from "react-redux";
-import { registerUser, loginUser, updateUser } from "store/userSlice";
+import { registerUser, updateUser } from "store/userSlice";
+import COLORS from "constants/color";
 
 import "react-toastify/dist/ReactToastify.css";
-
-const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [credentials, changeInCredentials, disabled] = useOutletContext();
-
-  const loginFunc = (event) => {
-    event.preventDefault();
-
-    dispatch(
-      loginUser({
-        params: {
-          username: credentials.username,
-          password: credentials.password,
-        },
-        callback: (data) => {
-          localStorage.setItem("id", data.id);
-          navigate("/main");
-        },
-      })
-    );
-  };
-
-  return (
-    <>
-      <CustomTextInput
-        type={"text"}
-        autoComplete={"off"}
-        value={credentials.username}
-        onChange={(event) => changeInCredentials(event, "username")}
-        placeholder={"username"}
-      />
-      <CustomTextInput
-        type={"password"}
-        autoComplete={"off"}
-        value={credentials.password}
-        onChange={(event) => changeInCredentials(event, "password")}
-        placeholder={"password"}
-      />
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          gap: 10,
-        }}
-      >
-        <StandardButton
-          style={{
-            opacity: disabled ? 0.7 : 1,
-          }}
-          onClick={loginFunc}
-          buttonText={"Login"}
-          disabled={disabled}
-        />
-        <div style={styles.verticalLine}></div>
-        <p
-          onClick={() => {
-            navigate("/register");
-          }}
-          style={{
-            color: "#0000cc",
-            textDecoration: "underline",
-          }}
-        >
-          Register User
-        </p>
-      </div>
-    </>
-  );
-};
 
 const Register = () => {
   const navigate = useNavigate();
@@ -87,6 +16,7 @@ const Register = () => {
 
   const registerFunc = (event) => {
     event.preventDefault();
+
     dispatch(
       registerUser({
         body: { ...credentials },
@@ -181,9 +111,9 @@ const Register = () => {
 
 const styles = {
   verticalLine: {
-    borderLeft: "2px solid #c6538c",
+    borderLeft: `2px solid ${COLORS.PRIMARY}`,
     height: "30px",
   },
 };
 
-export { Login, Register };
+export default Register;

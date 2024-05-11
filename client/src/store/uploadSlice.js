@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ERROR_MESSAGE } from "constants/message";
+import MESSAGES from "constants/message";
 import api from "api";
 
 export const fileUpload = createAsyncThunk(
@@ -18,7 +18,7 @@ export const fileUpload = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -38,7 +38,7 @@ export const getFile = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );

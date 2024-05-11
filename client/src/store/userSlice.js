@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ERROR_MESSAGE } from "constants/message";
+import MESSAGES from "constants/message";
 import api from "api";
 
 export const registerUser = createAsyncThunk(
@@ -17,7 +17,7 @@ export const registerUser = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -37,7 +37,7 @@ export const loginUser = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -57,7 +57,7 @@ export const updateUser = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -77,7 +77,7 @@ export const deleteUser = createAsyncThunk(
 
       return res.data.user;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -97,7 +97,7 @@ export const getUser = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );

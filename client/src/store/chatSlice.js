@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ERROR_MESSAGE } from "constants/message";
+import MESSAGES from "constants/message";
 import api from "api";
 
 export const getAllUsers = createAsyncThunk(
@@ -18,7 +18,7 @@ export const getAllUsers = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -40,7 +40,7 @@ export const sendMessage = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
@@ -62,7 +62,7 @@ export const fetchMessages = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message ?? ERROR_MESSAGE);
+      return thunkAPI.rejectWithValue(error?.message ?? MESSAGES.error_message);
     }
   }
 );
