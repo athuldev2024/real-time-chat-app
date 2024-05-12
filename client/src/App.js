@@ -8,6 +8,8 @@ import MainPage from "pages/MainPage";
 import NotFoundPage from "pages/NotFoundPage";
 import Login from "components/Login";
 import Register from "components/Register";
+import Update from "components/Update";
+import ChatApplication from "components/ChatApplication";
 
 const App = () => {
   return (
@@ -20,7 +22,8 @@ const App = () => {
               <Route path="/register" Component={Register} />
             </Route>
             <Route path="/main" Component={MainPage}>
-              {/* <Route index Component={MainPage} /> */}
+              <Route index Component={ChatApplication} />
+              <Route path="/main/update" Component={Update} />
             </Route>
             <Route path="*" Component={NotFoundPage} />
           </Routes>
