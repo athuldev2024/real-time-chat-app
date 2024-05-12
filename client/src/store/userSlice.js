@@ -44,10 +44,10 @@ export const loginUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async ({ body, callback }, thunkAPI) => {
+  async ({ params, body, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/update/${body.identifier}`,
+        path: `users/update/${params.identifier}`,
         method: "PATCH",
         params: {},
         body,
