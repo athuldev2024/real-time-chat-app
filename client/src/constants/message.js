@@ -6,6 +6,7 @@ const MESSAGES = {
   register_instruction:
     "INFO: mobile number is check if already exists in database.Email can have duplication for now.",
   go_back: "Go back to main page",
+  delete_user_confirm: "Are you sure you want to delete this user?",
 };
 
 export default MESSAGES;

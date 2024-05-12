@@ -26,7 +26,6 @@ export const getAllUsers = createAsyncThunk(
 export const sendMessage = createAsyncThunk(
   "chats/sendmessage",
   async ({ body, callback }, thunkAPI) => {
-    console.log("BODY: ", body);
     try {
       const res = await api({
         path: `chats/sendmessage`,

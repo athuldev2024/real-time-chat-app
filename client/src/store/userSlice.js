@@ -47,7 +47,7 @@ export const updateUser = createAsyncThunk(
   async ({ body, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/update/${body.id}`,
+        path: `users/update/${body.identifier}`,
         method: "PATCH",
         params: {},
         body,
@@ -67,13 +67,13 @@ export const deleteUser = createAsyncThunk(
   async ({ params, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/delete/${params.id}`,
+        path: `users/delete/${params.identifier}`,
         method: "DELETE",
         params: {},
         body: {},
       });
 
-      callback && callback();
+      callback && callback(res);
 
       return res.data.user;
     } catch (error) {

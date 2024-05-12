@@ -9,7 +9,8 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   const navigateFromHere = () => {
-    navigate("/main");
+    const identifier = localStorage.getItem("identifier");
+    navigate(identifier ? "/main" : "/");
   };
 
   return (

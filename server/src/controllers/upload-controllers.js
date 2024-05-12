@@ -21,8 +21,6 @@ export const userUploadSingleFile = async (req, res, next) => {
         .status(statusCodes.CONFLICT)
         .json({ message: messages.USER_NOT_EXISTS });
 
-    console.log("FILENAME: ", fileName);
-
     await db.upload.update(
       { profilename: fileName },
       {

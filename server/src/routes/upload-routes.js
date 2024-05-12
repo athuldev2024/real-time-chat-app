@@ -12,8 +12,6 @@ const router = Router();
 
 const PATH = path.join(__dirname, "..", "..", "public");
 
-console.log("DIRECTORY: ", PATH);
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, PATH);
