@@ -20,7 +20,12 @@ import MESSAGES from "constants/message";
 import image from "assets/login-image.avif";
 import placeholder from "assets/placeholder.png";
 
-const SETTINGS = ["Edit Profile picture", "Delete", "Logout"];
+const SETTINGS = [
+  "Edit Profile picture",
+  "Delete",
+  "Edit user details",
+  "Logout",
+];
 
 function Header() {
   const dispatch = useDispatch();
@@ -95,6 +100,9 @@ function Header() {
         handleOpenModal();
         break;
       case SETTINGS[2]:
+        navigate("/main/update");
+        break;
+      case SETTINGS[3]:
         logout(() => navigate("/"));
         break;
       default:

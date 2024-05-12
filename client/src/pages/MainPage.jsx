@@ -10,8 +10,8 @@ const Main = () => {
   const { isLoading } = useSelector((state) => state.user);
   const [credentials, setCredentials] = useState({
     username: "",
+
     password: "",
-    mobile: "",
     email: "",
     confirm: "",
   });
@@ -21,7 +21,6 @@ const Main = () => {
     setDisabled(
       credentials.username &&
         credentials.password &&
-        credentials.mobile &&
         credentials.email &&
         credentials.confirm
         ? false

@@ -24,7 +24,7 @@ const Update = () => {
           body: { ...credentials },
           params: { identifier },
           callback: () => {
-            // navigate("/main");
+            navigate("/main");
           },
         })
       );
@@ -55,13 +55,6 @@ const Update = () => {
         value={credentials.confirm}
         onChange={(event) => changeInCredentials(event, "confirm")}
         placeholder={"confirm password"}
-      />
-      <CustomTextInput
-        type={"number"}
-        autoComplete={"off"}
-        value={credentials.mobile}
-        onChange={(event) => changeInCredentials(event, "mobile")}
-        placeholder={"mobile"}
       />
       <CustomTextInput
         type={"text"}
