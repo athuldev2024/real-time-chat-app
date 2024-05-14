@@ -3,19 +3,30 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
+import _ from "lodash";
 import COLORS from "constants/color";
 import Header from "components/Header";
 
 const Main = () => {
-  const { isLoading } = useSelector((state) => state.user);
+  const { isLoading, userDetails } = useSelector((state) => state.user);
   const [credentials, setCredentials] = useState({
     username: "",
-
-    password: "",
     email: "",
+    password: "",
     confirm: "",
   });
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (!_.isEmpty(userDetails)) {
+      setCredentials({
+        username: userDetails?.username,
+        email: userDetails?.email,
+        password: userDetails?.password,
+        confirm: userDetails?.password,
+      });
+    }
+  }, [userDetails]);
 
   useEffect(() => {
     setDisabled(
@@ -46,7 +57,14 @@ const Main = () => {
       ) : (
         <>
           <Header />
-          <Outlet context={[credentials, changeInCredentials, disabled]} />
+          <Outlet
+            context={[
+              credentials,
+              changeInCredentials,
+              setCredentials,
+              disabled,
+            ]}
+          />
         </>
       )}
     </div>

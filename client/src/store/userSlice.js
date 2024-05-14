@@ -119,7 +119,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasError = false;
-        state.userDetails = action.payload;
+        state.userDetails = action.payload?.userDetails;
       })
       .addCase(registerUser.rejected, (state) => {
         state.isLoading = false;
@@ -133,7 +133,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasError = false;
-        state.userDetails = action.payload;
+        state.userDetails = action.payload?.userDetails;
       })
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
@@ -173,7 +173,7 @@ const userSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasError = false;
-        state.userDetails = action.payload;
+        state.userDetails = action.payload?.userDetails;
       })
       .addCase(getUser.rejected, (state) => {
         state.isLoading = false;

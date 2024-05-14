@@ -38,6 +38,7 @@ export const userUploadSingleFile = async (req, res, next) => {
 
 export const previewSingleFile = async (req, res, next) => {
   try {
+    let filePath;
     const { identifier } = matchedData(req);
 
     const existingUser = await db.upload.findOne({
@@ -46,18 +47,11 @@ export const previewSingleFile = async (req, res, next) => {
       },
     });
 
-    if (!existingUser)
-      return res
-        .status(statusCodes.CONFLICT)
-        .json({ message: messages.USER_NOT_EXISTS });
-
-    const filename = existingUser?.dataValues?.profilename;
-    const filePath = path.join(__dirname, "..", "..", "public", filename);
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(statusCodes.CONFLICT).json({
-        message: messages.FILE_NOT_FOUND,
-      });
+    if (existingUser?.dataValues && !fs.existsSync(filePath)) {
+      const filename = existingUser?.dataValues?.profilename;
+      filePath = path.join(__dirname, "..", "..", "public", filename);
+    } else {
+      filePath = path.join(__dirname, "..", "..", "public", "placeholder.png");
     }
 
     return res.status(statusCodes.SUCCESS).sendFile(filePath);

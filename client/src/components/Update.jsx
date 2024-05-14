@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Update = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [credentials, changeInCredentials, disabled] = useOutletContext();
+  const [credentials, changeInCredentials, , disabled] = useOutletContext();
 
   const registerNewUser = (event) => {
     event.preventDefault();
