@@ -38,6 +38,7 @@ const registerUser = async (req, res, next) => {
     return res.status(statusCodes.CREATED).json({
       message: messages.USER_CREATED,
       identifier: newUser?.dataValues?.identifier,
+      userDetails: newUser?.dataValues,
     });
   } catch (error) {
     next(error);
@@ -72,6 +73,7 @@ const loginUser = async (req, res, next) => {
     return res.status(statusCodes.SUCCESS).json({
       message: messages.LOGGED_IN,
       identifier: existingUser?.dataValues?.identifier,
+      userDetails: existingUser?.dataValues,
     });
   } catch (error) {
     next(error);
