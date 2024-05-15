@@ -3,11 +3,14 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getAllUserExceptMe } from "store/userSlice";
 import _ from "lodash";
 import COLORS from "constants/color";
 import Header from "components/Header";
 
 const Main = () => {
+  const dispatch = useDispatch();
   const { isLoading, userDetails } = useSelector((state) => state.user);
   const [credentials, setCredentials] = useState({
     username: "",
@@ -16,6 +19,16 @@ const Main = () => {
     confirm: "",
   });
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    const identifier = localStorage.getItem("identifier");
+    dispatch(
+      getAllUserExceptMe({
+        params: { identifier },
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!_.isEmpty(userDetails)) {
