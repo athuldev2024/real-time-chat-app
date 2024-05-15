@@ -53,6 +53,8 @@ export const updateUser = createAsyncThunk(
         body,
       });
 
+      console.log("I have reached at the last function callback");
+      console.log("callback", callback);
       callback && callback();
 
       return res.data;
