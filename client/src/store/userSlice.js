@@ -53,8 +53,6 @@ export const updateUser = createAsyncThunk(
         body,
       });
 
-      console.log("I have reached at the last function callback");
-      console.log("callback", callback);
       callback && callback();
 
       return res.data;
@@ -114,10 +112,9 @@ const userSlice = createSlice({
   },
   reducers: {
     updateUserDetails(state, action) {
-      console.log("action.payload.userDetails: ", action.payload.userDetails);
       state.userDetails = {
         ...state.userDetails,
-        ...action.payload.userDetails,
+        ...action.payload,
       };
     },
   },
