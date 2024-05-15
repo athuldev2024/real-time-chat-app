@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import CustomTextInput from "components/common/CustomTextInput";
 import StandardButton from "components/common/StandardButton";
@@ -8,6 +8,7 @@ import { updateUser } from "store/userSlice";
 import COLORS from "constants/color";
 import MESSAGES from "constants/message";
 import { showToastMessage } from "utils/toast-utils";
+import { updateUserDetails } from "store/userSlice";
 import "react-toastify/dist/ReactToastify.css";
 
 const Update = () => {
@@ -24,6 +25,14 @@ const Update = () => {
           body: { ...credentials },
           params: { identifier },
           callback: () => {
+            dispatch(
+              updateUserDetails({
+                username: credentials?.username,
+                email: credentials?.email,
+                password: credentials?.password,
+                confirm: credentials?.confirm,
+              })
+            );
             navigate("/main");
           },
         })
