@@ -82,14 +82,14 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
+export const getAllUserExceptMe = createAsyncThunk(
   "user/getUser",
   async ({ params, callback }, thunkAPI) => {
     try {
       const res = await api({
-        path: `users/getUser`,
+        path: `users/allusersexpectme/${params.identifier}`,
         method: "GET",
-        params: { id: params.id },
+        params: {},
         body: {},
       });
 
@@ -106,8 +106,18 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     userDetails: {},
+    allUsers: [],
     isLoading: false,
     hasError: false,
+  },
+  reducers: {
+    updateUserDetails(state, action) {
+      console.log("action.payload.userDetails: ", action.payload.userDetails);
+      state.userDetails = {
+        ...state.userDetails,
+        ...action.payload.userDetails,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -165,21 +175,22 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.hasError = true;
       })
-      // Get User
-      .addCase(getUser.pending, (state) => {
+      // Get all Users except me
+      .addCase(getAllUserExceptMe.pending, (state) => {
         state.isLoading = true;
         state.hasError = false;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getAllUserExceptMe.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasError = false;
-        state.userDetails = action.payload?.userDetails;
+        state.allUsers = action.payload?.allUsers;
       })
-      .addCase(getUser.rejected, (state) => {
+      .addCase(getAllUserExceptMe.rejected, (state) => {
         state.isLoading = false;
         state.hasError = true;
       });
   },
 });
 
+export const { updateUserDetails } = userSlice.actions;
 export default userSlice.reducer;
