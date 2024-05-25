@@ -36,3 +36,22 @@
   font-size: 0.9rem;
   color: #d3d3d3;
 }
+
+.main-cell {
+  height: "100%";
+  width: "50%";
+}
+.usertab {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: 300px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.usertab:hover {
+  opacity: 0.8;
+}
+.usertab:active {
+  opacity: 0.3;
+}
