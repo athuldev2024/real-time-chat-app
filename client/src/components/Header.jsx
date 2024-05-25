@@ -38,14 +38,15 @@ function Header() {
 
   useEffect(() => {
     const identifier = localStorage.getItem("identifier");
-    dispatch(
-      getSingleFile({
-        identifier,
-        callback: (res) => {
-          setProfileImg(res.request.responseURL);
-        },
-      })
-    );
+    identifier &&
+      dispatch(
+        getSingleFile({
+          identifier,
+          callback: (res) => {
+            setProfileImg(res.request.responseURL);
+          },
+        })
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

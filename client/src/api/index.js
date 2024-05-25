@@ -2,7 +2,6 @@ import axios from "axios";
 import MESSAGES from "constants/message";
 import { showToastMessage } from "utils/toast-utils";
 
-const URL = "http://localhost:5000/api/";
 const SUCCESS_MESSAGE_ARR = [201, 200, 204];
 
 const api = async ({ path, method, params, body }) => {
@@ -10,7 +9,7 @@ const api = async ({ path, method, params, body }) => {
     const response = await axios({
       url: path,
       method,
-      baseURL: URL,
+      baseURL: process.env.REACT_APP_API_URL,
       params,
       data: body,
       validateStatus: () => true,
