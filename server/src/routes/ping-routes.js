@@ -9,12 +9,8 @@ router.post("/sendmessage", checkSchema(pingValidationSchema), sendMessage);
 
 router.get(
   "/fetchmessages",
-  [
-    query("identifier", "Invalid identifier")
-      .isString()
-      .notEmpty()
-      .optional(false),
-  ],
+  [query("sender", "Invalid sender").isString().notEmpty().optional(false)],
+  [query("receiver", "Invalid receiver").isString().notEmpty().optional(false)],
   checkIfValidationErrors,
   fetchmessages
 );

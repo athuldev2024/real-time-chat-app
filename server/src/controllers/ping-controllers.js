@@ -24,11 +24,14 @@ const sendMessage = async (req, res, next) => {
 
 const fetchmessages = async (req, res, next) => {
   try {
-    const { identifier } = matchedData(req);
+    const { sender, receiver } = matchedData(req);
 
     const allMessages = await db.ping.findAll({
       where: {
-        [Op.or]: [{ sender: identifier }, { receiver: identifier }],
+        [Op.or]: [
+          { sender, receiver },
+          { sender: receiver, receiver: sender },
+        ],
       },
     });
 

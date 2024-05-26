@@ -18,6 +18,7 @@ const ChatScreen = ({ identifier }) => {
   const { isLoading, messages } = useSelector((state) => state.chat);
 
   useEffect(() => {
+    const room = [identifier, myID].sort().join();
     if (identifier) {
       socket.on("message_received", (data) => {
         console.log(
@@ -37,12 +38,13 @@ const ChatScreen = ({ identifier }) => {
         }
       });
 
-      const room = [identifier, myID].sort().join();
+      console.log("Joined the room: ", room);
       socket.emit("join_room", room);
     }
 
     return () => {
       socket.removeAllListeners("message_received");
+      socket.emit("exit_room", room);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identifier, myID]);
@@ -52,7 +54,8 @@ const ChatScreen = ({ identifier }) => {
       dispatch(
         fetchAllMessages({
           params: {
-            identifier,
+            sender: myID,
+            receiver: identifier,
           },
         })
       );
