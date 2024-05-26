@@ -1,17 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ReactLoading from "react-loading";
 import COLORS from "constants/color";
 import { fetchAllMessages, sendMessage } from "store/chatSlice";
 import { updateMessages } from "store/chatSlice";
+import { io } from "socket.io-client";
 import StandardButton from "components/common/StandardButton";
 import CustomTextInput from "components/common/CustomTextInput";
+
+const socket = io.connect("http://localhost:5000");
 
 const ChatScreen = ({ identifier }) => {
   const myID = localStorage.getItem("identifier");
   const [ping, setPing] = useState("");
+  const tempId = useRef(0);
   const dispatch = useDispatch();
   const { isLoading, messages } = useSelector((state) => state.chat);
+
+  useEffect(() => {
+    if (identifier) {
+      alert("Hi, I just recived a message");
+      socket.once("message_received", (data) => {
+        console.log(
+          "MESSAGE from socker =========================================> ",
+          data
+        ); // remove me
+
+        if (data.sender !== myID) {
+          dispatch(
+            updateMessages({
+              id: `Temp${tempId.current}`,
+              sender: data.receiver,
+              receiver: data.sender,
+              message: data.message,
+            })
+          );
+        }
+      });
+
+      const room = [identifier, myID].sort().join();
+      socket.emit("join_room", room);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [identifier, myID]);
 
   useEffect(() => {
     if (identifier) {
@@ -27,21 +58,24 @@ const ChatScreen = ({ identifier }) => {
   }, [identifier]);
 
   const pingMessage = () => {
+    const messageBody = {
+      sender: myID,
+      receiver: identifier,
+      message: ping,
+    };
     dispatch(
       sendMessage({
-        body: {
-          sender: myID,
-          receiver: identifier,
-          message: ping,
-        },
+        body: messageBody,
         callback: () => {
-          dispatch(
-            updateMessages({
-              sender: myID,
-              receiver: identifier,
-              message: ping,
-            })
-          );
+          const room = [myID, identifier].sort().join();
+          socket.emit("sendMessage", {
+            data: { ...messageBody, id: `Temp${tempId.current}` },
+            room,
+          });
+
+          dispatch(updateMessages({ ...messageBody, id: `Temp${tempId}` }));
+          tempId.current += 1;
+          setPing("");
         },
       })
     );

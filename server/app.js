@@ -3,6 +3,7 @@ import http from "http";
 import cors from "cors";
 import routes from "./src/routes";
 import bodyParser from "body-parser";
+import socketio from "socket.io";
 import "dotenv/config";
 import db from "@models";
 
@@ -28,4 +29,28 @@ db.sequelize
 
 server.listen(PORT, () => {
   console.log(`Server running in PORT: ${PORT}`);
+});
+
+// Socket.IO
+const io = socketio(server, {
+  cors: {
+    origin: "*",
+  },
+  pingTimeout: 60000,
+});
+io.on("connection", (socket) => {
+  console.log(`Socket ${socket.id} connected`);
+
+  socket.on("join_room", (room) => {
+    console.log(`${socket.id} joined this room ${room}`);
+    socket.join(room);
+  });
+
+  socket.on("sendMessage", ({ room, data }) => {
+    socket.to(room).emit("message_received", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`Socket ${socket.id} disconnected`);
+  });
 });
