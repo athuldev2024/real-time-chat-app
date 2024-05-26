@@ -20,7 +20,7 @@ const ChatScreen = ({ identifier }) => {
   useEffect(() => {
     if (identifier) {
       alert("Hi, I just recived a message");
-      socket.once("message_received", (data) => {
+      socket.on("message_received", (data) => {
         console.log(
           "MESSAGE from socker =========================================> ",
           data
@@ -41,6 +41,10 @@ const ChatScreen = ({ identifier }) => {
       const room = [identifier, myID].sort().join();
       socket.emit("join_room", room);
     }
+
+    return () => {
+      socket.removeAllListeners("message_received");
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identifier, myID]);
 
