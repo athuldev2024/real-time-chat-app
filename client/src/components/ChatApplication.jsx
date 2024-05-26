@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ChatScreen from "./ChatScreen";
 import COLORS from "constants/color";
 
-const UserTab = ({ item }) => {
+const UserTab = ({ item, gotoTheChat }) => {
   const profilePIc = `${process.env.REACT_APP_API_URL}uploads/previewsingle/${item.identifier}`;
-  const gotoTheChat = () => {
-    console.log("GOTO the chat application");
-  };
 
   return (
     <div className={"usertab"} onClick={gotoTheChat}>
@@ -32,6 +30,7 @@ const UserTab = ({ item }) => {
 };
 
 const ChatApplication = () => {
+  const [selectedId, setSelectedId] = useState();
   const navigate = useNavigate();
   const { allUsers } = useSelector((state) => state.user);
 
@@ -46,14 +45,26 @@ const ChatApplication = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allUsers]);
 
+  const gotoTheChat = (identifier) => {
+    setSelectedId(identifier);
+  };
+
   return (
     <div style={styles.container}>
       <div className="main-cell">
         {allUsers.map((item) => {
-          return <UserTab key={item.identifier} item={item} />;
+          return (
+            <UserTab
+              key={item.identifier}
+              item={item}
+              gotoTheChat={() => gotoTheChat(item.identifier)}
+            />
+          );
         })}
       </div>
-      <div className="main-cell"></div>
+      <div className="main-cell">
+        <ChatScreen identifier={selectedId} />
+      </div>
     </div>
   );
 };
