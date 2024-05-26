@@ -63,7 +63,7 @@ const ChatScreen = ({ identifier }) => {
               {messages.map((item) => {
                 return (
                   <div
-                    key={item.identifier}
+                    key={item.id}
                     style={{
                       alignSelf:
                         identifier !== item?.sender ? "flex-end" : "flex-start",
