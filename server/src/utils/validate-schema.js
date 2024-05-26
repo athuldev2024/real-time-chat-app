@@ -31,8 +31,14 @@ const mobile = {
 const identifier = {
   notEmpty: true,
   isInt: true,
-  errorMessage: "Invalid ID",
+  errorMessage: "Invalid identifier",
   optional: false,
+};
+
+const message = {
+  notEmpty: true,
+  isString: true,
+  errorMessage: "Invalid user message",
 };
 
 export const createUserValidationSchema = {
@@ -47,4 +53,10 @@ export const patchUserValidationSchema = {
   password: { ...password, optional: true },
   email: { ...email, optional: true },
   mobile: { ...mobile, optional: true },
+};
+
+export const pingValidationSchema = {
+  sender: { ...identifier, optional: false },
+  receiver: { ...identifier, optional: false },
+  message: { ...message, optional: false },
 };

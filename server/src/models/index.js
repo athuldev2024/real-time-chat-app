@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import UserModel from "./user-model";
 import UploadModel from "./upload-model";
+import PingModel from "./ping-model";
 import messages from "@constants/message";
 import "dotenv/config";
 
@@ -27,6 +28,7 @@ const db = {
   sequelize,
   user: UserModel(sequelize, DataTypes),
   upload: UploadModel(sequelize, DataTypes),
+  ping: PingModel(sequelize, DataTypes),
 };
 
 db.user.hasOne(db.upload, {

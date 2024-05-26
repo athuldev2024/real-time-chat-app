@@ -14,6 +14,8 @@ const messages = {
   // Files related
   SINGLE_FILE_UPLOAD: "File uploaded",
   FILE_NOT_FOUND: "File not found",
+  // Chat application
+  PING_SUCCESS: "Message has been sent successfully",
 };
 
 export default messages;
