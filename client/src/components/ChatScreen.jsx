@@ -19,7 +19,6 @@ const ChatScreen = ({ identifier }) => {
 
   useEffect(() => {
     if (identifier) {
-      alert("Hi, I just recived a message");
       socket.on("message_received", (data) => {
         console.log(
           "MESSAGE from socker =========================================> ",
@@ -30,8 +29,8 @@ const ChatScreen = ({ identifier }) => {
           dispatch(
             updateMessages({
               id: `Temp${tempId.current}`,
-              sender: data.receiver,
-              receiver: data.sender,
+              sender: Number(data.sender),
+              receiver: Number(data.receiver),
               message: data.message,
             })
           );
